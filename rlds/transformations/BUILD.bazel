@@ -1,0 +1,257 @@
+# Copyright 2021 Google LLC.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Build targets for rlds.transformations.
+
+load("@py_deps//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_library")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+py_library(
+    name = "transformations",
+    srcs = ["__init__.py"],
+    srcs_version = "PY3",
+    deps = [
+        ":alignment",
+        ":dataset_concat",
+        ":dataset_stats",
+        ":dataset_truncate",
+        ":flexible_batch",
+        ":nested_ops",
+        ":shape_ops",
+    ],
+)
+
+py_library(
+    name = "flexible_batch",
+    srcs = ["flexible_batch.py"],
+    srcs_version = "PY3",
+    deps = [
+        ":shape_ops",
+        "//rlds:rlds_types",
+        requirement("tensorflow"),
+    ],
+)
+
+py_library(
+    name = "dataset_concat",
+    srcs = ["dataset_concat.py"],
+    srcs_version = "PY3",
+    deps = [
+        ":flexible_batch",
+        ":nested_ops",
+        ":shape_ops",
+        "//rlds:rlds_types",
+        requirement("tensorflow"),
+    ],
+)
+
+py_library(
+    name = "shape_ops",
+    srcs = ["shape_ops.py"],
+    srcs_version = "PY3",
+    deps = [
+        "//rlds:rlds_types",
+        requirement("tensorflow"),
+    ],
+)
+
+py_library(
+    name = "transformations_testlib",
+    srcs = ["transformations_testlib.py"],
+    srcs_version = "PY3",
+    deps = [
+        requirement("absl-py"),
+        requirement("tensorflow"),
+    ],
+)
+
+py_library(
+    name = "alignment",
+    srcs = ["alignment.py"],
+    srcs_version = "PY3",
+    deps = [
+        ":batched_helpers",
+        ":flexible_batch",
+        "//rlds:rlds_types",
+        requirement("tensorflow"),
+    ],
+)
+
+py_library(
+    name = "batched_helpers",
+    srcs = ["batched_helpers.py"],
+    srcs_version = "PY3",
+    deps = [
+        ":flexible_batch",
+        "//rlds:rlds_types",
+        requirement("tensorflow"),
+    ],
+)
+
+py_library(
+    name = "dataset_stats",
+    srcs = ["dataset_stats.py"],
+    srcs_version = "PY3",
+    deps = [
+        ":dataset_concat",
+        ":flexible_batch",
+        ":nested_ops",
+        ":shape_ops",
+        "//rlds:rlds_types",
+        requirement("numpy"),
+        requirement("tensorflow"),
+    ],
+)
+
+py_library(
+    name = "nested_ops",
+    srcs = ["nested_ops.py"],
+    srcs_version = "PY3",
+    deps = [
+        ":flexible_batch",
+        ":shape_ops",
+        "//rlds:rlds_types",
+        requirement("tensorflow"),
+    ],
+)
+
+py_library(
+    name = "dataset_truncate",
+    srcs = ["dataset_truncate.py"],
+    srcs_version = "PY3",
+    deps = [
+        ":shape_ops",
+        "//rlds:rlds_types",
+        requirement("tensorflow"),
+    ],
+)
+
+py_test(
+    name = "flexible_batch_test",
+    srcs = ["flexible_batch_test.py"],
+    deps = [
+        ":flexible_batch",
+        ":transformations_testlib",
+        "//rlds:rlds_types",
+        requirement("absl-py"),
+        requirement("tensorflow"),
+        requirement("numpy"),
+    ],
+)
+
+py_test(
+    name = "dataset_concat_test",
+    srcs = ["dataset_concat_test.py"],
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":dataset_concat",
+        ":shape_ops",
+        ":transformations_testlib",
+        "//rlds:rlds_types",
+        requirement("absl-py"),
+        requirement("tensorflow"),
+    ],
+)
+
+py_test(
+    name = "shape_ops_test",
+    srcs = ["shape_ops_test.py"],
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":shape_ops",
+        ":transformations_testlib",
+        "//rlds:rlds_types",
+        requirement("absl-py"),
+        requirement("tensorflow"),
+    ],
+)
+
+py_test(
+    name = "alignment_test",
+    srcs = ["alignment_test.py"],
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":alignment",
+        ":transformations_testlib",
+        "//rlds:rlds_types",
+        requirement("absl-py"),
+        requirement("tensorflow"),
+    ],
+)
+
+py_test(
+    name = "batched_helpers_test",
+    srcs = ["batched_helpers_test.py"],
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":batched_helpers",
+        ":transformations_testlib",
+        requirement("absl-py"),
+        requirement("numpy"),
+        "//rlds:rlds_types",
+        requirement("tensorflow"),
+    ],
+)
+
+py_test(
+    name = "dataset_stats_test",
+    srcs = ["dataset_stats_test.py"],
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":dataset_stats",
+        ":transformations_testlib",
+        requirement("absl-py"),
+        requirement("numpy"),
+        "//rlds:rlds_types",
+        requirement("tensorflow"),
+    ],
+)
+
+py_test(
+    name = "nested_ops_test",
+    srcs = ["nested_ops_test.py"],
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":nested_ops",
+        ":transformations_testlib",
+        requirement("absl-py"),
+        requirement("numpy"),
+        "//rlds:rlds_types",
+        requirement("tensorflow"),
+    ],
+)
+
+py_test(
+    name = "dataset_truncate_test",
+    srcs = ["dataset_truncate_test.py"],
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":dataset_truncate",
+        ":transformations_testlib",
+        requirement("absl-py"),
+        "//rlds:rlds_types",
+        requirement("tensorflow"),
+    ],
+)
