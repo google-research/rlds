@@ -139,8 +139,6 @@ def _is_valid_steps_dataset(dataset: tf.data.Dataset) -> bool:
           DISCOUNT in step)
 
 
-# TODO(sabela): add a more comprehensive validation to check that the content
-# of the steps is valid.
 def is_valid_rlds_dataset(dataset: tf.data.Dataset) -> bool:
   """Basic validation of an episodes dataset.
 

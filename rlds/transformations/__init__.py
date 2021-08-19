@@ -24,7 +24,6 @@ from rlds.transformations.dataset_concat import concatenate
 
 from rlds.transformations.dataset_stats import mean_and_std
 
-from rlds.transformations.dataset_truncate import next_is_terminal
 from rlds.transformations.dataset_truncate import truncate_after_condition
 
 from rlds.transformations.flexible_batch import batch

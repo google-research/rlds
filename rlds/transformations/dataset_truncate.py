@@ -37,7 +37,6 @@ def truncate_after_condition(
     `truncate_condition`.
 
   """
-  # TODO(sabela): Provide a version optimized with batching.
   # First, we convert the dataset of steps to a dataset of tuples containing
   # (step, condition_in_prev_step). This is needed to make sure we include the
   # step for which the condition is True.
@@ -51,26 +50,4 @@ def truncate_after_condition(
 
   return data_with_prev.map(lambda step, tag: step)
 
-
-# TODO(damienv, sabela): avoid exposing this through the API.
-def next_is_terminal(steps_dataset: tf.data.Dataset) -> tf.data.Dataset:
-  """Transforms a dataset into a dataset of tuples (step, next_is_terminal).
-
-  Args:
-    steps_dataset: dataset of steps. Steps are dictionaries and expected to
-      contain an `IS_TERMINAL` key with a boolean value.
-
-  Returns:
-    A dataset with tuples of (step, bool) where the bool indicates if the next
-    step is terminal.
-  """
-  # TODO(sabela): Provide a version optimized with batching.
-  step0 = tf.data.experimental.get_single_element(steps_dataset.take(1))
-  next_steps = steps_dataset.skip(1).concatenate(
-      shape_ops.zero_dataset_like(steps_dataset))
-
-  scan_fn = tf.data.experimental.scan(
-    step0, lambda step, next_step:
-     (next_step, (step, next_step[rlds_types.IS_TERMINAL])))
-  return next_steps.apply(scan_fn)
 
