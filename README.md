@@ -1,7 +1,17 @@
-# RL Datasets
+# RLDS
 
-RL Datasets is a system to store, retrieve and filter RL trajectories in order
-to use them in RL workflows.
+RLDS stands for Reinforcement Learning Datasets and it is an ecosystem of tools
+to store, retrieve, manipulate episodic data in in the context of Sequential
+Decision Making including Reinforcement Learning (RL), Learning for
+Demonstrations, Offline RL or Imitation Learning.
+
+This repo includes a library for manipulating RLDS compliant datasets. Please
+refer to:
+
+*   [EnvLogger](http://github.com/deepmind/envlogger) to create synthetic datasets
+*   [RLDS Creator](http://github.com/google-research/rlds-creator) to create datasets where a human interacts with an
+    environment.
+*   [TFDS](http://www.tensorflow.org/datasets/catalog/overview) for existing RL datasets.
 
 ### Dataset Format{#dataset_format}
 
