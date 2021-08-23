@@ -13,7 +13,7 @@ refer to:
     environment.
 *   [TFDS](http://www.tensorflow.org/datasets/catalog/overview) for existing RL datasets.
 
-### Dataset Format{#dataset_format}
+### Dataset Format
 
 The dataset is retrieved as a `tf.data.Dataset` of Episodes.
 
@@ -44,8 +44,7 @@ The dataset is retrieved as a `tf.data.Dataset` of Episodes.
 
 You can then apply regular `tf.data.Dataset` transformations to this format.
 
-### Using TFDS to load a dataset {#tfds-load}
-
+### Load with TFDS
 
 #### Datasets in the TFDS catalog
 
