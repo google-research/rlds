@@ -13,6 +13,12 @@ refer to:
     environment.
 *   [TFDS](http://www.tensorflow.org/datasets/catalog/overview) for existing RL datasets.
 
+### QuickStart
+
+See how to use RLDS in this [tutorial].
+
+[tutorial]: http://github.com/google-research/rlds/blob/main/rlds/examples/rlds_tutorial.ipynb
+
 ### Dataset Format
 
 The dataset is retrieved as a `tf.data.Dataset` of Episodes.
@@ -43,6 +49,8 @@ The dataset is retrieved as a `tf.data.Dataset` of Episodes.
     action, reward and discount might be empty as well.
 
 You can then apply regular `tf.data.Dataset` transformations to this format.
+
+### RLDS Loaders
 
 ### Load with TFDS
 
