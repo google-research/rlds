@@ -50,9 +50,7 @@ The dataset is retrieved as a `tf.data.Dataset` of Episodes.
 
 You can then apply regular `tf.data.Dataset` transformations to this format.
 
-### RLDS Loaders
-
-### Load with TFDS
+## How to load your dataset
 
 #### Datasets in the TFDS catalog
 
@@ -64,12 +62,29 @@ tfds.load('dataset_name').as_dataset()['train']
 
 See the full documentation and the catalog in https://www.tensorflow.org/datasets.
 
+#### Datasets in your own repository
+
+Datasets can be implemented with TFDS both inside and outside of the TFDS
+repository. See examples about how to load them
+[here](https://www.tensorflow.org/datasets/external_tfrecord?hl=en#load_dataset_with_tfds).
+
 ## How to add your dataset to TFDS
 
 ### Using the TFDS catalog
 
 You can add your dataset directly to TFDS
-following the instructions at https://www.tensorflow.org/datasets ([example](http://github.com/tensorflow/datasets/tree/master/tensorflow_datasets/rl_unplugged/rlu_atari)).
+following the instructions at https://www.tensorflow.org/datasets.
+
+* If your data has been generated with Envlogger or the RLDS Creator, you can just use the rlds helpers in TFDS (see [here] (https://github.com/tensorflow/datasets/blob/master/tensorflow_datasets/rlds/robosuite_panda_pick_place_can/robosuite_panda_pick_place_can.py) an example).
+* Otherwise, make sure your `generate_examples` implementation provides the same structure
+  and keys as RLDS loaders if you want your dataset to be compatible with RLDS
+  pipelines
+  ([example](https://github.com/tensorflow/datasets/blob/master/tensorflow_datasets/d4rl/dataset_utils.py)).
+
+([example](https://github.com/tensorflow/datasets/blob/master/tensorflow_datasets/rl_unplugged/rlu_atari/rlu_atari.py)).
+
+Note that you can follow the same steps to add the data to your own repository
+(see more details in the [TFDS documentation](https://www.tensorflow.org/datasets/add_dataset?hl=en)).
 
 ## Acknowledgements
 
