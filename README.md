@@ -75,13 +75,12 @@ repository. See examples about how to load them
 You can add your dataset directly to TFDS
 following the instructions at https://www.tensorflow.org/datasets.
 
-* If your data has been generated with Envlogger or the RLDS Creator, you can just use the rlds helpers in TFDS (see [here] (https://github.com/tensorflow/datasets/blob/master/tensorflow_datasets/rlds/robosuite_panda_pick_place_can/robosuite_panda_pick_place_can.py) an example).
+* If your data has been generated with Envlogger or the RLDS Creator, you can just use the rlds helpers in TFDS (see [here](https://github.com/tensorflow/datasets/blob/master/tensorflow_datasets/rlds/robosuite_panda_pick_place_can/robosuite_panda_pick_place_can.py) an example).
 * Otherwise, make sure your `generate_examples` implementation provides the same structure
   and keys as RLDS loaders if you want your dataset to be compatible with RLDS
   pipelines
   ([example](https://github.com/tensorflow/datasets/blob/master/tensorflow_datasets/d4rl/dataset_utils.py)).
 
-([example](https://github.com/tensorflow/datasets/blob/master/tensorflow_datasets/rl_unplugged/rlu_atari/rlu_atari.py)).
 
 Note that you can follow the same steps to add the data to your own repository
 (see more details in the [TFDS documentation](https://www.tensorflow.org/datasets/add_dataset?hl=en)).
