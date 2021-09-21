@@ -141,6 +141,18 @@ following the instructions at https://www.tensorflow.org/datasets.
 Note that you can follow the same steps to add the data to your own repository
 (see more details in the [TFDS documentation](https://www.tensorflow.org/datasets/add_dataset?hl=en)).
 
+## Performance best practices
+
+As RLDS exposes RL datasets in a form of Tensorflow's
+[tf.data](https://www.tensorflow.org/api_docs/python/tf/data), many Tensorflow's
+[performance hints](https://www.tensorflow.org/guide/data_performance#optimize_performance)
+apply to RLDS as well. It is important to note, however, that RLDS datasets are
+very specific and not all general speed-up methods work out of the box. advices
+on improving performance might not result in expected outcome. To get a better
+understanding on how to use RLDS datasets effectively we recommend going through
+this
+[colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_performance.ipynb).
+
 ## Acknowledgements
 
 We greatly appreciate all the support from the
