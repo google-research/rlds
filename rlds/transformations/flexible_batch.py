@@ -75,7 +75,7 @@ def _windowed_to_batched_dataset(
 
 
 def batch(dataset: tf.data.Dataset,
-          size: int,
+          size: int = BATCH_AUTO_TUNE,
           shift: Optional[int] = None,
           stride: int = 1,
           drop_remainder: bool = False) -> tf.data.Dataset:
@@ -85,10 +85,11 @@ def batch(dataset: tf.data.Dataset,
 
   Args:
     dataset: dataset to be batched.
-    size: number of elements per batch.
+    size: number of elements per batch. The default value (BATCH_AUTO_TUNE)
+      makes size selection automatic to target efficient execution.
     shift: increment to compute the index to start the next batch (shift=1 means
       that we create a batch for each element in the input dataset). Must be
-      positive.
+      positive. If not specified, shift is defaults to size.
     stride: increment to compute the index to select the next element of each
       batch (stride=1 means that we include consecutive elements in the batch).
       Must be positive.
@@ -109,7 +110,8 @@ def batch(dataset: tf.data.Dataset,
    * batch(ds, size=2, shift=1, stride=2, False)->([1, 3], [2, 4], [3], [4])
 
   """
-  if not shift and stride == 1:
+  size = get_batch_size(dataset, size)
+  if (not shift or shift == size) and stride == 1:
     return dataset.batch(batch_size=size, drop_remainder=drop_remainder)
   windowed = dataset.window(
       size=size, shift=shift, stride=stride, drop_remainder=drop_remainder)
