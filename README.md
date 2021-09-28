@@ -1,12 +1,12 @@
 # RLDS
 
 RLDS stands for Reinforcement Learning Datasets and it is an ecosystem of tools
-to store, retrieve, manipulate episodic data in in the context of Sequential
+to store, retrieve and manipulate episodic data in the context of Sequential
 Decision Making including Reinforcement Learning (RL), Learning for
 Demonstrations, Offline RL or Imitation Learning.
 
-This repo includes a library for manipulating RLDS compliant datasets. Please
-refer to:
+This repository includes a library for manipulating RLDS compliant datasets.
+For other parts of the pipeline please refer to:
 
 *   [EnvLogger](http://github.com/deepmind/envlogger) to create synthetic
     datasets
