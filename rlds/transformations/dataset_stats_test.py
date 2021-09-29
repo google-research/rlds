@@ -116,6 +116,38 @@ class DatasetStatsTest(transformations_testlib.TransformationsTest):
     self.expect_nested_dict_equality(
         std[rlds_types.ACTION], self.expected_action_std, approximate=True)
 
+  def test_sar_fields_mask(self):
+    step = self.steps1_dataset.take(1).get_single_element()
+    fields, mask = dataset_stats.sar_fields_mask(step)
+
+    expected_fields = {
+        rlds_types.OBSERVATION: step[rlds_types.OBSERVATION],
+        rlds_types.ACTION: step[rlds_types.ACTION],
+        rlds_types.REWARD: step[rlds_types.REWARD],
+    }
+
+    self.expect_equal_step(fields, expected_fields)
+
+    self.assertTrue(mask[rlds_types.OBSERVATION])
+    self.assertTrue(mask[rlds_types.ACTION])
+    self.assertTrue(mask[rlds_types.REWARD])
+
+  def test_sar_fields_mask_last_step(self):
+    step = self.steps2_dataset.skip(2).take(1).get_single_element()
+    fields, mask = dataset_stats.sar_fields_mask(step)
+
+    expected_fields = {
+        rlds_types.OBSERVATION: step[rlds_types.OBSERVATION],
+        rlds_types.ACTION: step[rlds_types.ACTION],
+        rlds_types.REWARD: step[rlds_types.REWARD],
+    }
+
+    self.expect_equal_step(fields, expected_fields)
+
+    self.assertTrue(mask[rlds_types.OBSERVATION])
+    self.assertFalse(mask[rlds_types.ACTION])
+    self.assertFalse(mask[rlds_types.REWARD])
+
 
 if __name__ == '__main__':
   absltest.main()

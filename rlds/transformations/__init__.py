@@ -23,6 +23,7 @@ from rlds.transformations.dataset_concat import concat_if_terminal
 from rlds.transformations.dataset_concat import concatenate
 
 from rlds.transformations.dataset_stats import mean_and_std
+from rlds.transformations.dataset_stats import sar_fields_mask
 
 from rlds.transformations.dataset_truncate import truncate_after_condition
 

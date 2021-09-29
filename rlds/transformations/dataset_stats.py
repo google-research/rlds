@@ -24,6 +24,36 @@ from rlds.transformations import shape_ops
 import tensorflow as tf
 
 
+def sar_fields_mask(
+    step: rlds_types.Step) -> Tuple[Dict[str, Any], Dict[str, bool]]:
+  """Obtains the core fields assuming SAR alignment.
+
+  This can be used as a parameter to `mean_and_std` when the steps user SAR
+  alignment (the RLDS default) and observation and action are formed by fields
+  whose mean and std can be obtained (for example, they don't contain serialized
+  images).
+
+  Args:
+    step: RLDS step.
+
+  Returns:
+    Tuple with the data (observation, action, reward) and a mask indicating
+    if the fields are valid.
+  """
+
+  data = {
+      k: step[k]
+      for k in [rlds_types.OBSERVATION, rlds_types.ACTION, rlds_types.REWARD]
+  }
+  # In SAR alignment, the action and the reward are invalid in the last step.
+  mask = {
+      rlds_types.OBSERVATION: True,
+      rlds_types.ACTION: not step[rlds_types.IS_LAST],
+      rlds_types.REWARD: not step[rlds_types.IS_LAST],
+  }
+  return (data, mask)
+
+
 def mean_and_std(
     episodes_dataset: tf.data.Dataset,
     get_step_fields: Callable[[rlds_types.Step], Tuple[Dict[str, Any],
