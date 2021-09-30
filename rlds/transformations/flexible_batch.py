@@ -53,7 +53,7 @@ def get_batch_size(dataset: tf.data.Dataset,
   return  max(1, DEFAULT_BATCH_SIZE_IN_BYTES // step_size_in_bytes)
 
 
-def _windowed_to_batched_dataset(
+def _windowed_to_batch(
     nested_dataset: Union[Dict[str, Any], Tuple[Any], tf.data.Dataset],
     batch_size: int) -> Union[Dict[str, Any], Tuple[Any], Any]:
   """Converts a nested windowed dataset into a batch.
@@ -69,9 +69,28 @@ def _windowed_to_batched_dataset(
 
   """
   return tf.nest.map_structure(
-      lambda ds: tf.data.experimental.get_single_element(
-          ds.batch(batch_size)),
-      nested_dataset)
+      lambda ds: ds.batch(batch_size), nested_dataset)
+
+
+def _windowed_map_to_batch(
+    nested_dataset: Dict[str, Any],
+    batch_size: int) -> Dict[str, Any]:
+  """Converts a map of nested windowed datasets into a batch.
+
+  Args:
+    nested_dataset: map of nested datasets that have been generated with a
+      window transformation.
+    batch_size: desired batch size (it has to correspond to the size used for
+      the window transformation).
+
+  Returns:
+    Batch that respects the nested structure of the given dataset.
+
+  """
+  keys = nested_dataset.keys()
+  ds = tf.data.Dataset.zip(
+      tuple([_windowed_to_batch(nested_dataset[k], batch_size) for k in keys]))
+  return ds.map(lambda *args: {k: v for k, v in zip(keys, args)})
 
 
 def batch(dataset: tf.data.Dataset,
@@ -115,5 +134,7 @@ def batch(dataset: tf.data.Dataset,
     return dataset.batch(batch_size=size, drop_remainder=drop_remainder)
   windowed = dataset.window(
       size=size, shift=shift, stride=stride, drop_remainder=drop_remainder)
-  return windowed.map(
-      lambda windowed_ds: _windowed_to_batched_dataset(windowed_ds, size))
+  if isinstance(dataset.element_spec, dict):
+    return windowed.flat_map(
+        lambda windowed_ds: _windowed_map_to_batch(windowed_ds, size))
+  return windowed.flat_map(lambda windowed_ds: windowed_ds.batch(size))

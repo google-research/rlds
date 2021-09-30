@@ -56,7 +56,6 @@ class StepBatchTest(transformations_testlib.TransformationsTest):
         stride=1,
         drop_remainder=True)
     expected_dataset = tf.data.Dataset.from_tensor_slices(expected_steps)
-    self.assertLen(steps_dataset, 2)
 
     self.expect_equal_datasets(steps_dataset, expected_dataset)
 
@@ -70,6 +69,30 @@ class StepBatchTest(transformations_testlib.TransformationsTest):
     self.assertLen(steps_dataset, 1)
 
     self.expect_equal_datasets(steps_dataset, expected_dataset)
+
+  def test_window_for_simple_dataset(self):
+    ds = tf.data.Dataset.from_tensors(42).repeat(100)
+
+    generated_dataset = flexible_batch.batch(
+        ds, size=2, shift=1, stride=1, drop_remainder=True)
+    expected_dataset = ds.window(
+        size=2, shift=1, stride=1,
+        drop_remainder=True).flat_map(lambda element: element.batch(3))
+
+    for e1, e2 in zip(generated_dataset, expected_dataset):
+      self.assertTrue(all(e1 == e2))
+
+  def test_window_for_tuple_dataset(self):
+    ds = tf.data.Dataset.from_tensors([1]).repeat(100)
+
+    generated_dataset = flexible_batch.batch(
+        ds, size=2, shift=1, stride=1, drop_remainder=True)
+    expected_dataset = ds.window(
+        size=2, shift=1, stride=1,
+        drop_remainder=True).flat_map(lambda element: element.batch(3))
+
+    for e1, e2 in zip(generated_dataset, expected_dataset):
+      self.assertTrue(all(e1 == e2))
 
 
 if __name__ == '__main__':
