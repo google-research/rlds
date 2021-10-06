@@ -21,6 +21,14 @@ from rlds import rlds_types
 from rlds.transformations import shape_ops
 import tensorflow as tf
 
+
+from tensorflow.python.data.ops import dataset_ops
+from tensorflow.python.data.util import nest
+from tensorflow.python.framework import dtypes
+from tensorflow.python.framework import ops
+from tensorflow.python.ops import gen_experimental_dataset_ops as ged_ops
+
+
 # Used by the methods accepting optimization_batch_size to specify that batch
 # size is to be selected automatically trying to optimize the pipeline
 # execution.
@@ -93,6 +101,82 @@ def _windowed_map_to_batch(
   return ds.map(lambda *args: {k: v for k, v in zip(keys, args)})
 
 
+class _SlideDataset(dataset_ops.UnaryDataset):
+  """Copy of deprecated sliding dataset transformations from tf.contrib.data."""
+
+  def __init__(self, input_dataset, window_size, window_shift, window_stride):
+    """See `sliding_window_batch` for details."""
+    self._input_dataset = input_dataset
+    self._window_size = ops.convert_to_tensor(
+        window_size, dtype=dtypes.int64, name="window_size")
+    self._window_stride = ops.convert_to_tensor(
+        window_stride, dtype=dtypes.int64, name="window_stride")
+    self._window_shift = ops.convert_to_tensor(
+        window_shift, dtype=dtypes.int64, name="window_shift")
+
+    input_structure = dataset_ops.get_structure(input_dataset)
+    self._element_spec = nest.map_structure(
+        lambda component_spec: component_spec._batch(None), input_structure)
+    variant_tensor = ged_ops.sliding_window_dataset(
+        self._input_dataset._variant_tensor,
+        window_size=self._window_size,
+        window_shift=self._window_shift,
+        window_stride=self._window_stride,
+        **self._flat_structure)
+    super(_SlideDataset, self).__init__(input_dataset, variant_tensor)
+
+  @property
+  def element_spec(self):
+    return self._element_spec
+
+
+def _sliding_window_batch(size, shift=1, stride=1):
+  """A sliding window over a dataset.
+
+  This transformation passes a sliding window over this dataset. The window size
+  is `size`, the stride of the input elements is `stride`, and the shift between
+  consecutive windows is `shift`. If the remaining elements cannot fill up the
+  sliding window, this transformation will drop the final smaller element.
+  For example:
+
+  ```python
+  # NOTE: The following examples use `{ ... }` to represent the
+  # contents of a dataset.
+  a = { [1], [2], [3], [4], [5], [6] }
+
+  a.apply(_sliding_window_batch(size=3)) ==
+  { [[1], [2], [3]], [[2], [3], [4]], [[3], [4], [5]], [[4], [5], [6]] }
+
+  a.apply(_sliding_window_batch(size=3, shift=2)) ==
+  { [[1], [2], [3]], [[3], [4], [5]] }
+
+  a.apply(_sliding_window_batch(size=3, stride=2)) ==
+  { [[1], [3], [5]], [[2], [4], [6]] }
+  ```
+
+  Args:
+    size: A `tf.int64` scalar `tf.Tensor`, representing the number of
+      elements in the sliding window. It must be positive.
+    shift: (Optional.) A `tf.int64` scalar `tf.Tensor`, representing the
+      forward shift of the sliding window in each iteration. The default is `1`.
+      It must be positive.
+    stride: (Optional.) A `tf.int64` scalar `tf.Tensor`, representing the
+      stride of the input elements in the sliding window. The default is `1`.
+      It must be positive.
+
+  Returns:
+    A `Dataset` transformation function, which can be passed to
+    `tf.data.Dataset.apply`.
+
+  Raises:
+    ValueError: if invalid arguments are provided.
+  """
+  def _apply_fn(dataset):
+    return _SlideDataset(dataset, size, shift, stride)
+
+  return _apply_fn
+
+
 def batch(dataset: tf.data.Dataset,
           size: int = BATCH_AUTO_TUNE,
           shift: Optional[int] = None,
@@ -108,7 +192,7 @@ def batch(dataset: tf.data.Dataset,
       makes size selection automatic to target efficient execution.
     shift: increment to compute the index to start the next batch (shift=1 means
       that we create a batch for each element in the input dataset). Must be
-      positive. If not specified, shift is defaults to size.
+      positive. If not specified, shift defaults to size.
     stride: increment to compute the index to select the next element of each
       batch (stride=1 means that we include consecutive elements in the batch).
       Must be positive.
@@ -130,8 +214,13 @@ def batch(dataset: tf.data.Dataset,
 
   """
   size = get_batch_size(dataset, size)
-  if (not shift or shift == size) and stride == 1:
+  if not shift:
+    shift = size
+  if shift == size and stride == 1:
     return dataset.batch(batch_size=size, drop_remainder=drop_remainder)
+  if drop_remainder:
+    return dataset.apply(
+        _sliding_window_batch(size=size, stride=stride, shift=shift))
   windowed = dataset.window(
       size=size, shift=shift, stride=stride, drop_remainder=drop_remainder)
   if isinstance(dataset.element_spec, dict):

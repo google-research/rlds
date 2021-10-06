@@ -21,6 +21,8 @@ from rlds.transformations import transformations_testlib
 import tensorflow as tf
 
 
+# If any of the tests fail for strange reasons, make sure that TF didn't remove
+# or change internal 'sliding_window_dataset' OP.
 class StepBatchTest(transformations_testlib.TransformationsTest):
 
   def setUp(self):
@@ -36,7 +38,7 @@ class StepBatchTest(transformations_testlib.TransformationsTest):
         rlds_types.IS_FIRST: [True, False, False],
     }
 
-  def test_batch_with_overlap_works(self):
+  def test_window_batch_drop_reminder(self):
     expected_steps = {
         rlds_types.OBSERVATION: {
             'field0': [[[0, 0], [0, 1]], [[0, 1], [0, 2]]],
@@ -58,6 +60,16 @@ class StepBatchTest(transformations_testlib.TransformationsTest):
     expected_dataset = tf.data.Dataset.from_tensor_slices(expected_steps)
 
     self.expect_equal_datasets(steps_dataset, expected_dataset)
+
+  def test_window_batch_dont_drop_reminder(self):
+    steps_dataset = flexible_batch.batch(
+        tf.data.Dataset.from_tensor_slices(self.steps),
+        size=2,
+        shift=1,
+        stride=1,
+        drop_remainder=False)
+    length = steps_dataset.reduce(0, lambda count, episode: count+1)
+    self.assertEqual(length, 3)
 
   def test_batch_default_equivalent_to_batch(self):
     steps_dataset = flexible_batch.batch(
