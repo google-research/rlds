@@ -46,15 +46,6 @@ def batched_map(steps: tf.data.Dataset,
     The unbatched dataset of steps after applying the operation.
 
   """
-  size = flexible_batch.get_batch_size(steps, size)
-  options = tf.data.Options()
-  # We disable the map & batch fusion because this function uses a batch size
-  # larger than the size of the episode (sometimes, much larger). Because of
-  # this, merging map & batch operations assumes that there are more elements in
-  # the episode than the real size and it's very inefficient in memory
-  # consumption.
-  options.experimental_optimization.map_and_batch_fusion = False
-  steps = steps.with_options(options)
   steps = flexible_batch.batch(steps, size, shift, stride)
   steps = steps.map(map_fn)
   return steps.unbatch()
