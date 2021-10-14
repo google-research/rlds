@@ -15,11 +15,15 @@ For other parts of the pipeline please refer to:
 *   [TFDS](http://www.tensorflow.org/datasets/catalog/overview) for existing RL
     datasets.
 
-## QuickStart
+## QuickStart & Colabs
 
-See how to use RLDS in this [tutorial].
+See how to use RLDS in this
+[tutorial](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_tutorial.ipynb).
 
-[tutorial]: http://github.com/google-research/rlds/blob/main/rlds/examples/rlds_tutorial.ipynb
+You can find more examples in the following colabs:
+
+*   [Performance best practices](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_performance.ipynb)
+*   [RL examples](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_examples.ipynb)
 
 ## Dataset Format
 
