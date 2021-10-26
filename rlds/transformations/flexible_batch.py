@@ -104,7 +104,8 @@ def _windowed_map_to_batch(
 class _SlideDataset(dataset_ops.UnaryDataset):
   """Copy of deprecated sliding dataset transformations from tf.contrib.data."""
 
-  def __init__(self, input_dataset, window_size, window_shift, window_stride):
+  def __init__(self, input_dataset, window_size, window_shift, window_stride,
+               drop_remainder):
     """See `sliding_window_batch` for details."""
     self._input_dataset = input_dataset
     self._window_size = ops.convert_to_tensor(
@@ -113,6 +114,7 @@ class _SlideDataset(dataset_ops.UnaryDataset):
         window_stride, dtype=dtypes.int64, name="window_stride")
     self._window_shift = ops.convert_to_tensor(
         window_shift, dtype=dtypes.int64, name="window_shift")
+    self._drop_remainder = drop_remainder
 
     input_structure = dataset_ops.get_structure(input_dataset)
     self._element_spec = nest.map_structure(
@@ -122,6 +124,7 @@ class _SlideDataset(dataset_ops.UnaryDataset):
         window_size=self._window_size,
         window_shift=self._window_shift,
         window_stride=self._window_stride,
+        drop_remainder=self._drop_remainder,
         **self._flat_structure)
     super(_SlideDataset, self).__init__(input_dataset, variant_tensor)
 
@@ -130,7 +133,7 @@ class _SlideDataset(dataset_ops.UnaryDataset):
     return self._element_spec
 
 
-def _sliding_window_batch(size, shift=1, stride=1):
+def _sliding_window_batch(size, shift, stride, drop_remainder):
   """A sliding window over a dataset.
 
   This transformation passes a sliding window over this dataset. The window size
@@ -157,12 +160,14 @@ def _sliding_window_batch(size, shift=1, stride=1):
   Args:
     size: A `tf.int64` scalar `tf.Tensor`, representing the number of
       elements in the sliding window. It must be positive.
-    shift: (Optional.) A `tf.int64` scalar `tf.Tensor`, representing the
-      forward shift of the sliding window in each iteration. The default is `1`.
+    shift: A `tf.int64` scalar `tf.Tensor`, representing the
+      forward shift of the sliding window in each iteration.
       It must be positive.
-    stride: (Optional.) A `tf.int64` scalar `tf.Tensor`, representing the
-      stride of the input elements in the sliding window. The default is `1`.
+    stride: A `tf.int64` scalar `tf.Tensor`, representing the
+      stride of the input elements in the sliding window.
       It must be positive.
+    drop_remainder: A boolean representing whether the last batch should be
+      dropped if its size is smaller than size.
 
   Returns:
     A `Dataset` transformation function, which can be passed to
@@ -172,7 +177,7 @@ def _sliding_window_batch(size, shift=1, stride=1):
     ValueError: if invalid arguments are provided.
   """
   def _apply_fn(dataset):
-    return _SlideDataset(dataset, size, shift, stride)
+    return _SlideDataset(dataset, size, shift, stride, drop_remainder)
 
   return _apply_fn
 
@@ -218,12 +223,18 @@ def batch(dataset: tf.data.Dataset,
     shift = size
   if shift == size and stride == 1:
     return dataset.batch(batch_size=size, drop_remainder=drop_remainder)
-  if drop_remainder:
+  try:
     return dataset.apply(
-        _sliding_window_batch(size=size, stride=stride, shift=shift))
-  windowed = dataset.window(
-      size=size, shift=shift, stride=stride, drop_remainder=drop_remainder)
-  if isinstance(dataset.element_spec, dict):
-    return windowed.flat_map(
-        lambda windowed_ds: _windowed_map_to_batch(windowed_ds, size))
-  return windowed.flat_map(lambda windowed_ds: windowed_ds.batch(size))
+        _sliding_window_batch(
+            size=size,
+            stride=stride,
+            shift=shift,
+            drop_remainder=drop_remainder))
+  except TypeError:
+    # Old version of TF doesn't support drop_remainder parameter.
+    windowed = dataset.window(
+        size=size, shift=shift, stride=stride, drop_remainder=drop_remainder)
+    if isinstance(dataset.element_spec, dict):
+      return windowed.flat_map(
+          lambda windowed_ds: _windowed_map_to_batch(windowed_ds, size))
+    return windowed.flat_map(lambda windowed_ds: windowed_ds.batch(size))
