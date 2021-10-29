@@ -140,6 +140,15 @@ repository. See examples
 
 ## How to add your dataset to TFDS
 
+Adding a dataset to TFDS involves two steps:
+
+*   Implement a python class that provides a dataset builder with the specs of
+    the data (e.g., what is the shape of the observations, actions, etc.) and
+    how to read your dataset files.
+
+*   Run a `download_and_prepare` pipeline that converts the data to the TFDS
+    intermediate format.
+
 You can add your dataset directly to TFDS
 following the instructions at https://www.tensorflow.org/datasets.
 
