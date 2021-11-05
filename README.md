@@ -173,6 +173,22 @@ understanding on how to use RLDS datasets effectively we recommend going through
 this
 [colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_performance.ipynb).
 
+## Citation
+
+If you use RLDS, please cite the [RLDS paper](https://arxiv.org/abs/2111.02767)
+as
+
+```
+@misc{ramos2021rlds,
+      title={RLDS: an Ecosystem to Generate, Share and Use Datasets in Reinforcement Learning},
+      author={Sabela Ramos and Sertan Girgin and Léonard Hussenot and Damien Vincent and Hanna Yakubovich and Daniel Toyama and Anita Gergely and Piotr Stanczyk and Raphael Marinier and Jeremiah Harmsen and Olivier Pietquin and Nikola Momchev},
+      year={2021},
+      eprint={2111.02767},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
+```
+
 ## Acknowledgements
 
 We greatly appreciate all the support from the
