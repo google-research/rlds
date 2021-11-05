@@ -5,8 +5,8 @@ to store, retrieve and manipulate episodic data in the context of Sequential
 Decision Making including Reinforcement Learning (RL), Learning for
 Demonstrations, Offline RL or Imitation Learning.
 
-This repository includes a library for manipulating RLDS compliant datasets.
-For other parts of the pipeline please refer to:
+This repository includes a library for manipulating RLDS compliant datasets. For
+other parts of the pipeline please refer to:
 
 *   [EnvLogger](http://github.com/deepmind/envlogger) to create synthetic
     datasets
@@ -117,7 +117,6 @@ See [this section](#how-to-add-your-dataset-to-tfds) for instructions on how to
 add an RLDS dataset to TFDS.
 
 ### Load with TFDS
-
 
 #### Datasets in the TFDS catalog
 
