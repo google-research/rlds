@@ -70,7 +70,7 @@ Envlogger provides a [dm_env] `Environment` class wrapper that records
 interactions between a real environment and an agent.
 
 ```
-env = envloger.EnvironmentLogger(
+env = envlogger.EnvironmentLogger(
       environment,
       data_directory=`/tmp/mydataset`)
 ```
