@@ -70,12 +70,12 @@ Envlogger provides a [dm_env] `Environment` class wrapper that records
 interactions between a real environment and an agent.
 
 ```
-env = envlogger.EnvironmentLogger(
+env = envlogger.EnvLogger(
       environment,
       data_directory=`/tmp/mydataset`)
 ```
 
-Besides, two callbacks can be passed to the `EnviromentLogger` constructor to
+Besides, two callbacks can be passed to the `EnvLogger` constructor to
 store per-step metadata and per-episode metadata. See the [EnvLogger]
 documentation for more details.
 
