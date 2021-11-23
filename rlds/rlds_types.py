@@ -41,12 +41,12 @@ BatchedEpisode = Episode
 
 
 def build_step(
-    observation: Any,
-    action: Any,
-    reward: Any,
-    discount: Any,
+    observation: Optional[Any],
+    action: Optional[Any],
+    reward: Optional[Any],
+    discount: Optional[Any],
     # Union[List[X], X] is used to allow batching in the dataset.
-    is_terminal: Union[List[bool], bool],
+    is_terminal: Optional[Union[List[bool], bool]],
     is_first: Union[List[bool], bool],
     is_last: Union[List[bool], bool],
     metadata: Optional[Dict[str, Any]] = None) -> Step:
@@ -85,14 +85,19 @@ def build_step(
   if metadata is None:
     metadata = {}
   step = {
-      OBSERVATION: observation,
-      ACTION: action,
-      REWARD: reward,
-      DISCOUNT: discount,
-      IS_TERMINAL: is_terminal,
       IS_FIRST: is_first,
       IS_LAST: is_last,
   }
+  if observation is not None:
+    step[OBSERVATION] = observation
+  if action is not None:
+    step[ACTION] = action
+  if reward is not None:
+    step[REWARD] = reward
+  if discount is not None:
+    step[DISCOUNT] = discount
+  if is_terminal is not None:
+    step[IS_TERMINAL] = is_terminal
   for k, v in metadata.items():
     if k in step:
       raise ValueError(f'Invalid Step Metadata: it contains step key {k}')
@@ -124,7 +129,7 @@ def build_episode(
 
 
 def _is_valid_steps_dataset(dataset: tf.data.Dataset) -> bool:
-  """Basic validation of a steps dataset.
+  """Basic validation of a steps dataset with all the fields defined.
 
   Args:
     dataset: steps dataset.
@@ -143,7 +148,8 @@ def is_valid_rlds_dataset(dataset: tf.data.Dataset) -> bool:
   """Basic validation of an episodes dataset.
 
   Args:
-    dataset: episodes dataset.
+    dataset: episodes dataset. All the basic fields in the dataset have to be
+      defined.
 
   Returns:
     true if each episode contains the required episode keys and a valid steps

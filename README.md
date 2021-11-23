@@ -37,17 +37,20 @@ contains a `tf.data.Dataset` of steps.
 
 *   **Step**: dictionary that contains:
 
-    *   `observation`: current observation
-    *   `action`: action taken in the current observation
-    *   `reward`: return after appyling the action to the current observation
-    *   `is_terminal`: if this is a terminal step
-    *   `is_first`: if this is the first step of an episode that contains the
-        initial state.
-    *   `is_last`: if this is the last step of an episode, that contains the
-        last observation. When true, `action`, `reward` and `discount`, and
-        other cutom fields subsequent to the observation are considered invalid.
-    *   `discount`: discount factor at this step.
-    *   extra metadata
+    * Mandatory fields:
+
+      *   `is_first`: if this is the first step of an episode that contains the
+          initial state.
+      *   `is_last`: if this is the last step of an episode, that contains the
+          last observation. When true, `action`, `reward` and `discount`, and
+          other cutom fields subsequent to the observation are considered invalid.
+    * Optional fields:
+      *   `observation`: current observation
+      *   `action`: action taken in the current observation
+      *   `reward`: return after appyling the action to the current observation
+      *   `is_terminal`: if this is a terminal step
+      *   `discount`: discount factor at this step.
+      *   extra metadata
 
     When `is_terminal = True`, the `observation` corresponds to a final state,
     so `reward`, `discount` and `action` are meaningless. Depending on the
@@ -56,6 +59,9 @@ contains a `tf.data.Dataset` of steps.
     If an episode ends in a step where `is_terminal = False`, it means that this
     episode has been truncated. In this case, depending on the environment, the
     action, reward and discount might be empty as well.
+
+    Note: Although some fields of the steps are optional, all the steps in the
+    same dataset are required to have the same fields.
 
 ## How to create a dataset
 
