@@ -179,6 +179,42 @@ understanding on how to use RLDS datasets effectively we recommend going through
 this
 [colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_performance.ipynb).
 
+## FAQ
+
+### Processing steps in random order
+
+While by default the order of episodes in RLDS datasets is randomized and there
+is no need to randomize them again when loading the dataset, some algorithms
+operate on steps/n-step transitions. There are different ways to interleave
+steps across multiple episodes - for example:
+
+* Shuffle steps using [tf.data.Dataset.shuffle](https://www.tensorflow.org/api_docs/python/tf/data/Dataset#shuffle).
+Note that obtaining perfect shuffling this way involves specifying `buffer_size`
+which can accomodate entire dataset and can result in high memory usage for big datasets.
+
+* Interleave `N` copies of the dataset using [tf.data.Dataset.interleave](https://www.tensorflow.org/api_docs/python/tf/data/Dataset#interleave):
+
+```
+def ds_loader():
+  episode_dataset = tfds.load(...)
+  step_dataset = episode_dataset.flat_map(lambda x: x[rlds.STEPS])
+  return step_dataset
+
+dataset = Dataset.range(1, N).interleave(ds_loader, cycle_length=..., block_length=...)
+```
+
+Each copy of the dataset shuffles input partitions independently, so consecutive steps
+returned by the resulting dataset come from unrelated episodes. It is important to note,
+however, that this way each step will be loaded `N` times. To avoid duplicates,
+it is possible to construct each dataset using disjoint [splits](https://www.tensorflow.org/datasets/splits).
+
+### Reducing memory usage
+
+To improve throughput of loading datasets, by default TFDS loads multiple partitions
+of the dataset in parallel. In the case of datasets with big episodes that can result
+in high memory usage. If you run into high memory usage problems, it is worth playing
+around with `read_config` provided to [tfds.load](https://www.tensorflow.org/datasets/api_docs/python/tfds/load).
+
 ## Citation
 
 If you use RLDS, please cite the [RLDS paper](https://arxiv.org/abs/2111.02767)
