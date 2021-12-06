@@ -38,8 +38,9 @@ def shift_keys(
   Args:
     steps: `tf.data.Dataset` of steps.
     keys: list of step keys that have to be shifted.
-    shift: number of positions to shift (negative numbers mean shift left,
-      positive numbers mean shift right).
+    shift: number of positions to shift. Note that the shift is expressed as
+      an index. So, in step_i, the indicated keys will be now correspond
+      to the values of step_{i+shift}.
     batch_size: batch size to use when applying the transformation. It should be
       larger than `shift`. The default value (BATCH_AUTO_TUNE) makes batch size
       selection automatic.
