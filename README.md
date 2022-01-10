@@ -244,6 +244,8 @@ These are some publications that we know have used the RLDS ecosystem:
     L. Hussenot et al., ICML 2021.
 *   [Continuous Control with Action Quantization from Demonstrations](https://arxiv.org/pdf/2110.10149.pdf),R.
     Dadashi et al., Deep RL Workshop @NeurIPS 2021.
+*   [What Matters for Adversarial Imitation Learning?](https://arxiv.org/pdf/2106.00672.pdf)
+    M. Orsini et al., NeurIPS 2021.
 
 ## Citation
 
