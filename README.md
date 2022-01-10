@@ -15,6 +15,10 @@ other parts of the pipeline please refer to:
 *   [TFDS](http://www.tensorflow.org/datasets/catalog/overview) for existing RL
     datasets.
 
+Learn more about the RLDS ecosystem in the
+[Google AI Blog](https://ai.googleblog.com/2021/12/rlds-ecosystem-to-generate-share-and.html)
+and the [arXiv paper](https://arxiv.org/abs/2111.02767).
+
 ## QuickStart & Colabs
 
 See how to use RLDS in this
