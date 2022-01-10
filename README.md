@@ -29,6 +29,23 @@ You can find more examples in the following colabs:
 *   [Performance best practices](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_performance.ipynb)
 *   [RL examples](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_examples.ipynb)
 
+## Available datasets
+
+This is a non-exhaustive list of datasets that are compatible with RLDS:
+
+*   **[D4RL](https://www.tensorflow.org/datasets/catalog/overview#d4rl)**:
+    subset of the [D4RL suite](https://github.com/rail-berkeley/d4rl) with
+    Mujoco, Adroit and AntMaze tasks.
+*   **[RL Unplugged](https://www.tensorflow.org/datasets/catalog/overview#rl_unplugged)**:
+    subset of the
+    [RL Unplugged suite](https://github.com/deepmind/deepmind-research/tree/master/rl_unplugged)
+    that includes DMLab, Atari and Real World RL datasets.
+*   **[Robosuite](https://www.tensorflow.org/datasets/catalog/robosuite_panda_pick_place_can)**:
+    three [Robosuite](https://robosuite.ai/) datasets generated with the RLDS
+    tools.
+
+
+
 ## Dataset Format
 
 The dataset is retrieved as a `tf.data.Dataset` of Episodes where each episode
