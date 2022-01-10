@@ -44,7 +44,7 @@ This is a non-exhaustive list of datasets that are compatible with RLDS:
     three [Robosuite](https://robosuite.ai/) datasets generated with the RLDS
     tools.
 
-
+If you want to add your dataset to this list, let us know!
 
 ## Dataset Format
 
@@ -235,6 +235,12 @@ To improve throughput of loading datasets, by default TFDS loads multiple partit
 of the dataset in parallel. In the case of datasets with big episodes that can result
 in high memory usage. If you run into high memory usage problems, it is worth playing
 around with `read_config` provided to [tfds.load](https://www.tensorflow.org/datasets/api_docs/python/tfds/load).
+
+## Other research that uses RLDS
+
+These are some publications that we know have used RLDS:
+
+* [Hyperparameter Selection for Imitation Learning](https://arxiv.org/abs/2105.12034). L. Hussenot et al., ICML 2021.
 
 ## Citation
 
