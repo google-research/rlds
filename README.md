@@ -238,9 +238,12 @@ around with `read_config` provided to [tfds.load](https://www.tensorflow.org/dat
 
 ## Other research that uses RLDS
 
-These are some publications that we know have used RLDS:
+These are some publications that we know have used the RLDS ecosystem:
 
-* [Hyperparameter Selection for Imitation Learning](https://arxiv.org/abs/2105.12034). L. Hussenot et al., ICML 2021.
+*   [Hyperparameter Selection for Imitation Learning](https://arxiv.org/abs/2105.12034).
+    L. Hussenot et al., ICML 2021.
+*   [Continuous Control with Action Quantization from Demonstrations](https://arxiv.org/pdf/2110.10149.pdf),R.
+    Dadashi et al., Deep RL Workshop @NeurIPS 2021.
 
 ## Citation
 
