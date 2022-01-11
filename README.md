@@ -28,6 +28,7 @@ You can find more examples in the following colabs:
 
 *   [Performance best practices](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_performance.ipynb)
 *   [RL examples](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_examples.ipynb)
+*   [Colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/tfds_rlu_atari.ipynb) for loading uniformly subsampled RLU Atari datasets such as 1%, 5% and 10% Atari datasets, as introduced by [Agarwal et al. (2020)](https://arxiv.org/abs/1907.04543) and commonly used in offline RL research (e.g., CQL, Decision Transformer, MuZero ReAnalyze).
 
 ## Available datasets
 
@@ -229,6 +230,7 @@ returned by the resulting dataset come from unrelated episodes. It is important 
 however, that this way each step will be loaded `N` times. To avoid duplicates,
 it is possible to construct each dataset using disjoint [splits](https://www.tensorflow.org/datasets/splits).
 
+See one example of randomized access in the [Atari colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/tfds_rlu_atari.ipynb).
 ### Reducing memory usage
 
 To improve throughput of loading datasets, by default TFDS loads multiple partitions
