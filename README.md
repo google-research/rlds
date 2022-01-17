@@ -57,6 +57,29 @@ contains a `tf.data.Dataset` of steps.
 *   **Episode**: dictionary that contains a `tf.data.Dataset` of Steps, and
     metadata.
 
+    The metadeta fields are user-defined. While no names or types are
+    prescribed, we propose a set of optional fields that are generic and useful.
+    * Metadata optional fields:
+
+      * `episode_id`: Unique identifier of the episode within the dataset.
+        The episode ID should also be unique with high probability across
+        datasets so different datasets can be merged easily on the fly.
+      * `agent_id`: Unique identifier of the agent(s) that generated the
+        episode. In a multi-agent setting, this could be for example a tensor
+        of size Nx2 where N is the number of agents and where each pair
+        represents the agent name in the environment and the ID of the agent
+        that actually generated the episode.
+      * `environment_config`: Configuration of the environment that was used
+        to generate the episode.
+      * `experiment_id`: Identifier of an experiment when the episode was
+        generated as part of an experiment.
+      * `invalid`: Flag to signal invalid episodes, which in general
+        should be discarded at read time. Since episodes are in general
+        recorded step by step, there are a few scenarios where an episode
+        might be incomplete: e.g. machine preemption. This flag is usually
+        used in dtaasets that have just been created and not polished for
+        sharing.
+
 *   **Step**: dictionary that contains:
 
     * Mandatory fields:
