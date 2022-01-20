@@ -233,7 +233,6 @@ def episode_length(
   Returns:
     Number of steps in an episode.
   """
-
   cardinality = steps_dataset.cardinality()
   if cardinality != tf.data.experimental.UNKNOWN_CARDINALITY:
     return tf.cast(steps_dataset.cardinality(), tf.int32)

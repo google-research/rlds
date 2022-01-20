@@ -74,4 +74,5 @@ def zero_dataset_like(ds: tf.data.Dataset) -> tf.data.Dataset:
   Returns:
     Dataset of one element that has the same `element_spec` as `ds`.
   """
+
   return tf.data.Dataset.from_tensors(zeros_from_spec(ds.element_spec))

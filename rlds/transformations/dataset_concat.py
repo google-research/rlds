@@ -58,6 +58,7 @@ def concatenate(steps1: tf.data.Dataset,
     Dataset of steps1 and steps2.
   """
 
+
   spec_step1 = steps1.element_spec
   spec_step2 = steps2.element_spec
   steps1 = steps1.map(lambda step: _add_empty_values(step, spec_step2))
@@ -84,6 +85,7 @@ def concat_if_terminal(
     A dataset with the extra steps only if the original dataset ends in a
     terminal state and the original steps are transformed by `map_step_fn`.
   """
+
   final_step = nested_ops.final_step(steps)
   ends_in_terminal = final_step[rlds_types.IS_TERMINAL]
   if ends_in_terminal:

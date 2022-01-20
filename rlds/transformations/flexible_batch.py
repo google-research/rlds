@@ -29,6 +29,7 @@ from tensorflow.python.framework import ops
 from tensorflow.python.ops import gen_experimental_dataset_ops as ged_ops
 
 
+
 # Used by the methods accepting optimization_batch_size to specify that batch
 # size is to be selected automatically trying to optimize the pipeline
 # execution.
@@ -51,6 +52,7 @@ def get_batch_size(dataset: tf.data.Dataset,
   Returns:
     Size of the optimization batch.
   """
+
   if optimization_batch_size != BATCH_AUTO_TUNE:
     return optimization_batch_size
   if rlds_types.STEPS in dataset.element_spec:
@@ -109,11 +111,11 @@ class _SlideDataset(dataset_ops.UnaryDataset):
     """See `sliding_window_batch` for details."""
     self._input_dataset = input_dataset
     self._window_size = ops.convert_to_tensor(
-        window_size, dtype=dtypes.int64, name="window_size")
+        window_size, dtype=dtypes.int64, name='window_size')
     self._window_stride = ops.convert_to_tensor(
-        window_stride, dtype=dtypes.int64, name="window_stride")
+        window_stride, dtype=dtypes.int64, name='window_stride')
     self._window_shift = ops.convert_to_tensor(
-        window_shift, dtype=dtypes.int64, name="window_shift")
+        window_shift, dtype=dtypes.int64, name='window_shift')
     self._drop_remainder = drop_remainder
 
     input_structure = dataset_ops.get_structure(input_dataset)
@@ -218,6 +220,7 @@ def batch(dataset: tf.data.Dataset,
    * batch(ds, size=2, shift=1, stride=2, False)->([1, 3], [2, 4], [3], [4])
 
   """
+
   size = get_batch_size(dataset, size)
   if not shift:
     shift = size
