@@ -28,7 +28,12 @@ You can find more examples in the following colabs:
 
 *   [Performance best practices](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_performance.ipynb)
 *   [RL examples](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_examples.ipynb)
-*   [Colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/tfds_rlu_atari.ipynb) for loading uniformly subsampled RLU Atari datasets such as 1%, 5% and 10% Atari datasets, as introduced by [Agarwal et al. (2020)](https://arxiv.org/abs/1907.04543) and commonly used in offline RL research (e.g., CQL, Decision Transformer, MuZero ReAnalyze).
+*   [Colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/tfds_rlu_atari.ipynb)
+    for loading uniformly subsampled RLU Atari datasets such as 1%, 5% and 10%
+    Atari datasets, as introduced by
+    [Agarwal et al. (2020)](https://arxiv.org/abs/1907.04543) and commonly used
+    in offline RL research (e.g., CQL, Decision Transformer, MuZero ReAnalyze).
+*   [Generate and load a dataset with TFDS ](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_tfds_envlogger.ipynb)
 
 ## Available datasets
 
@@ -133,6 +138,10 @@ documentation for more details.
 Note that per-session metadata can be stored but is currently ignored when
 loading the dataset.
 
+We recommend to use the TFDS Envlogger backend in order to get datasets that can
+be read directly with TFDS. See an example in
+[this colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_tfds_envlogger.ipynb).
+
 Note that the Envlogger follows the [dm_env] convention. So considering:
 
 *   `o_i`: observation at step `i`
@@ -164,10 +173,18 @@ RL datasets can be loaded with [TFDS](#load-with-tfds)
 and they are retrieved
 with the canonical [RLDS dataset format](#dataset-format).
 
-See [this section](#how-to-add-your-dataset-to-tfds) for instructions on how to
-add an RLDS dataset to TFDS.
-
 ### Load with TFDS
+
+#### Datasets created with Envlogger and the TFDS backend
+
+These datasets can be loaded directly with:
+
+```py
+tfds.core.builder_from_directory('path').as_dataset(split='all')
+```
+
+See more examples in
+[this colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_tfds_envlogger.ipynb).
 
 #### Datasets in the TFDS catalog
 
@@ -190,7 +207,25 @@ repository. See examples
 
 ## How to add your dataset to TFDS
 
-Adding a dataset to TFDS involves two steps:
+This is only necessary when your dataset is not already in TFDS format or if you
+want to add it to the TFDS catalog.
+
+### My data is already in TFDS format
+
+If your data is already in TFDS format, most of the steps below will be either
+no-ops or very simple.
+
+1.  **Reshuffle**: When you want to re-generate the data to ensure that episodes
+    are shuffled on disk (otherwise, they are stored as they were generated with
+    Envlogger), follow the steps for the general case.
+1.  **Share**: Follow the steps for the general case. Consider if you
+    want to add the dataset to the TFDS catalog or if you just want to share it
+    in your own repository (note that users will still be able to load your data
+    directly with `tfds.builder_from_directory`).
+
+### My data is not in TFDS format
+
+In the general case, adding a dataset to TFDS involves two steps:
 
 *   Implement a python class that provides a dataset builder with the specs of
     the data (e.g., what is the shape of the observations, actions, etc.) and
