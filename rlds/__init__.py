@@ -16,6 +16,7 @@
 """RLDS basic API."""
 
 from rlds import transformations
+from rlds.envlogger_utils import get_standard_episode_metadata_fn
 
 
 from rlds.rlds_types import ACTION
