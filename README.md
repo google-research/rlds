@@ -49,6 +49,8 @@ This is a non-exhaustive list of datasets that are compatible with RLDS:
 *   **[Robosuite](https://www.tensorflow.org/datasets/catalog/robosuite_panda_pick_place_can)**:
     three [Robosuite](https://robosuite.ai/) datasets generated with the RLDS
     tools.
+*   **[Robomimic](https://www.tensorflow.org/datasets/catalog/overview#robomimic)**:
+    [subset of the Robomimic suite](https://arise-initiative.github.io/robomimic-web/).
 
 If you want to add your dataset to this list, let us know!
 
