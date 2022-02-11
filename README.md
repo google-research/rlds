@@ -45,12 +45,16 @@ This is a non-exhaustive list of datasets that are compatible with RLDS:
 *   **[RL Unplugged](https://www.tensorflow.org/datasets/catalog/overview#rl_unplugged)**:
     subset of the
     [RL Unplugged suite](https://github.com/deepmind/deepmind-research/tree/master/rl_unplugged)
-    that includes DMLab, Atari and Real World RL datasets.
+    that includes DMLab, Atari, Real World RL, Locomotion and Control Suite
+    datasets.
 *   **[Robosuite](https://www.tensorflow.org/datasets/catalog/robosuite_panda_pick_place_can)**:
     three [Robosuite](https://robosuite.ai/) datasets generated with the RLDS
     tools.
 *   **[Robomimic](https://www.tensorflow.org/datasets/catalog/overview#robomimic)**:
     [subset of the Robomimic suite](https://arise-initiative.github.io/robomimic-web/).
+*   **[MuJoCo Locomotion](https://www.tensorflow.org/datasets/catalog/locomotion)
+    datasets created with a SAC agent trained on the environment reward of
+    MuJoCo locomotion tasks. These datsets were generated with the RLDS tools.
 
 If you want to add your dataset to this list, let us know!
 
