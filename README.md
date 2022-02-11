@@ -182,7 +182,7 @@ with the canonical [RLDS dataset format](#dataset-format).
 These datasets can be loaded directly with:
 
 ```py
-tfds.core.builder_from_directory('path').as_dataset(split='all')
+tfds.builder_from_directory('path').as_dataset(split='all')
 ```
 
 See more examples in
