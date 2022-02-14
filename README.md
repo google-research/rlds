@@ -52,7 +52,7 @@ This is a non-exhaustive list of datasets that are compatible with RLDS:
     tools.
 *   **[Robomimic](https://www.tensorflow.org/datasets/catalog/overview#robomimic)**:
     [subset of the Robomimic suite](https://arise-initiative.github.io/robomimic-web/).
-*   **[MuJoCo Locomotion](https://www.tensorflow.org/datasets/catalog/locomotion)
+*   **[MuJoCo Locomotion](https://www.tensorflow.org/datasets/catalog/locomotion)**
     datasets created with a SAC agent trained on the environment reward of
     MuJoCo locomotion tasks. These datsets were generated with the RLDS tools.
 
