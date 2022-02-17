@@ -55,6 +55,8 @@ This is a non-exhaustive list of datasets that are compatible with RLDS:
 *   **[MuJoCo Locomotion](https://www.tensorflow.org/datasets/catalog/locomotion)**
     datasets created with a SAC agent trained on the environment reward of
     MuJoCo locomotion tasks. These datsets were generated with the RLDS tools.
+*   **[Robotics]**:
+    * [MT Opt dataset](https://www.tensorflow.org/datasets/catalog/mt_opt)
 
 If you want to add your dataset to this list, let us know!
 
