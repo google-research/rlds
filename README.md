@@ -55,8 +55,8 @@ This is a non-exhaustive list of datasets that are compatible with RLDS:
 *   **[MuJoCo Locomotion](https://www.tensorflow.org/datasets/catalog/locomotion)**
     datasets created with a SAC agent trained on the environment reward of
     MuJoCo locomotion tasks. These datsets were generated with the RLDS tools.
-*   **[Robotics]**:
-    * [MT Opt dataset](https://www.tensorflow.org/datasets/catalog/mt_opt)
+*   **Robotics**:
+    *   [MT Opt dataset](https://www.tensorflow.org/datasets/catalog/mt_opt)
 
 If you want to add your dataset to this list, let us know!
 
@@ -306,14 +306,21 @@ around with `read_config` provided to [tfds.load](https://www.tensorflow.org/dat
 
 ## Other research that uses RLDS
 
-These are some publications that we know have used the RLDS ecosystem:
+These are some publications that we know have used the RLDS ecosystem (either to
+obtain results, to produce dataset or to release new datasets):
 
 *   [Hyperparameter Selection for Imitation Learning](https://arxiv.org/abs/2105.12034).
     L. Hussenot et al., ICML 2021.
 *   [Continuous Control with Action Quantization from Demonstrations](https://arxiv.org/pdf/2110.10149.pdf),R.
-    Dadashi et al., Deep RL Workshop @NeurIPS 2021.
+    R. Dadashi et al., Deep RL Workshop @ NeurIPS 2021.
 *   [What Matters for Adversarial Imitation Learning?](https://arxiv.org/pdf/2106.00672.pdf)
     M. Orsini et al., NeurIPS 2021.
+*   [MT-Opt: Continuous Multi-Task Robotic Reinforcement Learning at Scale](https://arxiv.org/abs/2104.08212)
+    D. Kalashnikov et al.
+*   [Offline Reinforcement Learning with Pseudometric Learning](https://arxiv.org/abs/2103.01948)
+    R. Dadashi et al., ICML 2021.
+*   [Offline Reinforcement Learning as Anti-Exploration](https://arxiv.org/abs/2106.06431)
+    S. Rezaheifar et al.
 
 ## Citation
 
