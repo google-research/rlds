@@ -24,16 +24,10 @@ and the [arXiv paper](https://arxiv.org/abs/2111.02767).
 See how to use RLDS in this
 [tutorial](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_tutorial.ipynb).
 
-You can find more examples in the following colabs:
-
-*   [Performance best practices](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_performance.ipynb)
-*   [RL examples](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_examples.ipynb)
-*   [Colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/tfds_rlu_atari.ipynb)
-    for loading uniformly subsampled RLU Atari datasets such as 1%, 5% and 10%
-    Atari datasets, as introduced by
-    [Agarwal et al. (2020)](https://arxiv.org/abs/1907.04543) and commonly used
-    in offline RL research (e.g., CQL, Decision Transformer, MuZero ReAnalyze).
-*   [Generate and load a dataset with TFDS ](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_tfds_envlogger.ipynb)
+You can find more examples, including performance best practices in the
+[examples page](docs/examples.md). Besides, the
+[transformations page](docs/transformations.md) provides an
+overview of the RLDS library.
 
 ## Available datasets
 
@@ -146,7 +140,7 @@ documentation for more details.
 Note that per-session metadata can be stored but is currently ignored when
 loading the dataset.
 
-We recommend to use the TFDS Envlogger backend in order to get datasets that can
+NOTE: We recommend to use the TFDS Envlogger backend in order to get datasets that can
 be read directly with TFDS. See an example in
 [this colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_tfds_envlogger.ipynb).
 
@@ -158,7 +152,7 @@ Note that the Envlogger follows the [dm_env] convention. So considering:
 *   `d_i`: discount for reward `r_i`
 *   `m_i`: metadata for step `i`
 
-Data is generated and stored as:
+Data is generated as:
 
 ```none
     (o_0, _, _, _, m_0) → (o_1, a_0, r_0, d_0, m_1)  → (o_2, a_1, r_1, d_1, m_2) ⇢ ...
@@ -191,6 +185,12 @@ These datasets can be loaded directly with:
 tfds.builder_from_directory('path').as_dataset(split='all')
 ```
 
+or from a list of paths:
+
+```py
+tfds.builder_from_directories(paths).as_dataset(split='all')
+```
+
 See more examples in
 [this colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_tfds_envlogger.ipynb).
 
@@ -216,44 +216,8 @@ repository. See examples
 ## How to add your dataset to TFDS
 
 This is only necessary when your dataset is not already in TFDS format or if you
-want to add it to the TFDS catalog.
-
-### My data is already in TFDS format
-
-If your data is already in TFDS format, most of the steps below will be either
-no-ops or very simple.
-
-1.  **Reshuffle**: When you want to re-generate the data to ensure that episodes
-    are shuffled on disk (otherwise, they are stored as they were generated with
-    Envlogger), follow the steps for the general case.
-1.  **Share**: Follow the steps for the general case. Consider if you
-    want to add the dataset to the TFDS catalog or if you just want to share it
-    in your own repository (note that users will still be able to load your data
-    directly with `tfds.builder_from_directory`).
-
-### My data is not in TFDS format
-
-In the general case, adding a dataset to TFDS involves two steps:
-
-*   Implement a python class that provides a dataset builder with the specs of
-    the data (e.g., what is the shape of the observations, actions, etc.) and
-    how to read your dataset files.
-
-*   Run a `download_and_prepare` pipeline that converts the data to the TFDS
-    intermediate format.
-
-You can add your dataset directly to TFDS
-following the instructions at https://www.tensorflow.org/datasets.
-
-* If your data has been generated with Envlogger or the RLDS Creator, you can just use the rlds helpers in TFDS (see [here](https://github.com/tensorflow/datasets/blob/master/tensorflow_datasets/rlds/robosuite_panda_pick_place_can/robosuite_panda_pick_place_can.py) an example).
-* Otherwise, make sure your `generate_examples` implementation provides the same structure
-  and keys as RLDS loaders if you want your dataset to be compatible with RLDS
-  pipelines
-  ([example](https://github.com/tensorflow/datasets/blob/master/tensorflow_datasets/d4rl/dataset_utils.py)).
-
-
-Note that you can follow the same steps to add the data to your own repository
-(see more details in the [TFDS documentation](https://www.tensorflow.org/datasets/add_dataset?hl=en)).
+want to add it to the TFDS catalog. See more details in
+[this page](docs/tfds-add.md).
 
 ## Performance best practices
 
@@ -261,10 +225,13 @@ As RLDS exposes RL datasets in a form of Tensorflow's
 [tf.data](https://www.tensorflow.org/api_docs/python/tf/data), many Tensorflow's
 [performance hints](https://www.tensorflow.org/guide/data_performance#optimize_performance)
 apply to RLDS as well. It is important to note, however, that RLDS datasets are
-very specific and not all general speed-up methods work out of the box. advices
-on improving performance might not result in expected outcome. To get a better
-understanding on how to use RLDS datasets effectively we recommend going through
-this
+very specific and not all general speed-up methods work out of the box. Advice
+on improving performance might not result in expected outcome.
+
+RLDS provides an optimized
+[library of transformations](docs/transformations.md), but
+to get a better understanding on how to use RLDS datasets effectively we
+recommend going through this
 [colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_performance.ipynb).
 
 ## FAQ
