@@ -271,11 +271,10 @@ of the dataset in parallel. In the case of datasets with big episodes that can r
 in high memory usage. If you run into high memory usage problems, it is worth playing
 around with `read_config` provided to [tfds.load](https://www.tensorflow.org/datasets/api_docs/python/tfds/load).
 
-## Other research that uses RLDS
+## Who uses RLDS
 
-These are some publications that we know have used the RLDS ecosystem (either to
-obtain results, to produce dataset or to release new datasets):
-
+### Publications
+Below is a sample of publications using RLDS:
 *   [Hyperparameter Selection for Imitation Learning](https://arxiv.org/abs/2105.12034).
     L. Hussenot et al., ICML 2021.
 *   [Continuous Control with Action Quantization from Demonstrations](https://arxiv.org/pdf/2110.10149.pdf),R.
