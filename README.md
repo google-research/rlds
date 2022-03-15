@@ -264,10 +264,29 @@ however, that this way each step will be loaded `N` times. To avoid duplicates,
 it is possible to construct each dataset using disjoint [splits](https://www.tensorflow.org/datasets/splits).
 
 See one example of randomized access in the [Atari colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/tfds_rlu_atari.ipynb).
+### Reducing memory usage
 
-WARNING: We are working on a bug that causes issues when TFDS enables
-non-determinism. To avoid this, use a `shuffle_seed` in your `tfds.ReadConfig`
-(if you are using one) or set `shuffle_files=False` in `tfds.load`.
+To improve throughput of loading datasets, by default TFDS loads multiple partitions
+of the dataset in parallel. In the case of datasets with big episodes that can result
+in high memory usage. If you run into high memory usage problems, it is worth playing
+around with `read_config` provided to [tfds.load](https://www.tensorflow.org/datasets/api_docs/python/tfds/load).
+
+## Who uses RLDS
+
+### Publications
+Below is a sample of publications using RLDS:
+*   [Hyperparameter Selection for Imitation Learning](https://arxiv.org/abs/2105.12034).
+    L. Hussenot et al., ICML 2021.
+*   [Continuous Control with Action Quantization from Demonstrations](https://arxiv.org/pdf/2110.10149.pdf),R.
+    R. Dadashi et al., Deep RL Workshop @ NeurIPS 2021.
+*   [What Matters for Adversarial Imitation Learning?](https://arxiv.org/pdf/2106.00672.pdf)
+    M. Orsini et al., NeurIPS 2021.
+*   [MT-Opt: Continuous Multi-Task Robotic Reinforcement Learning at Scale](https://arxiv.org/abs/2104.08212)
+    D. Kalashnikov et al.
+*   [Offline Reinforcement Learning with Pseudometric Learning](https://arxiv.org/abs/2103.01948)
+    R. Dadashi et al., ICML 2021.
+*   [Offline Reinforcement Learning as Anti-Exploration](https://arxiv.org/abs/2106.06431)
+    S. Rezaheifar et al.
 
 ## Citation
 
