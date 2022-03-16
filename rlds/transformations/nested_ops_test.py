@@ -130,6 +130,37 @@ class NestedOpsTest(transformations_testlib.TransformationsTest):
         self.assertTrue(
             tf.reduce_all(tf.equal(expected_obs[k], normalized_obs[k])))
 
+  @parameterized.parameters((1,), (2,), (flexible_batch.BATCH_AUTO_TUNE,))
+  def test_map_steps(self, batch_size):
+    shift = tf.nest.map_structure(lambda x: -tf.cast(x, tf.float32),
+                                  self.obs_mean)
+    scale = tf.nest.map_structure(
+        lambda x: tf.cast(1.0 / np.maximum(x, 1e-3), tf.float32), self.obs_std)
+
+    def normalize_step(step: Dict[str, Any]) -> Dict[str, Any]:
+      step[rlds_types.OBSERVATION] = tf.nest.map_structure(
+          lambda x, x_offset, x_scale: (x + x_offset) * x_scale,
+          step[rlds_types.OBSERVATION], shift, scale)
+      return step
+
+    steps_dataset = self.episodes_dataset.flat_map(
+        lambda x: x[rlds_types.STEPS])
+    normalized_ds = nested_ops.map_steps(
+        steps_dataset,
+        normalize_step,
+        optimization_batch_size=batch_size)
+
+    two_ds = tf.data.Dataset.zip((steps_dataset, normalized_ds))
+    for (sample, normalized) in two_ds:
+      normalized_obs = normalized[rlds_types.OBSERVATION]
+      expected_obs = tf.nest.map_structure(
+          lambda obs, shift, scale: (obs + shift) * scale,
+          sample[rlds_types.OBSERVATION], shift, scale)
+      for k in expected_obs:
+        self.assertEqual(expected_obs[k].shape, normalized_obs[k].shape)
+        self.assertTrue(
+            tf.reduce_all(tf.equal(expected_obs[k], normalized_obs[k])))
+
   def test_nested_apply(self):
     def truncate_episode(steps):
       return steps.take(2)

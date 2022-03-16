@@ -92,6 +92,38 @@ def map_nested_steps(
 
 
 
+def map_steps(
+    steps_dataset: tf.data.Dataset,
+    transform_step: Callable[[rlds_types.Step], Any],
+    optimization_batch_size: int = flexible_batch.BATCH_AUTO_TUNE
+) -> tf.data.Dataset:
+  """Applies a transformation to all the elements of a dataset.
+
+  Args:
+    steps_dataset: Dataset of steps.
+    transform_step: Function that takes one step and applies a transformation.
+      The return type is not necessarily a step.
+    optimization_batch_size: how many steps to process in a single batch.
+      The default value (BATCH_AUTO_TUNE) makes batch size selection automatic.
+
+  Returns:
+    A dataset where all the steps are transformed according to the
+    transformation function.
+  """
+  optimization_batch_size = flexible_batch.get_batch_size(
+      steps_dataset, optimization_batch_size)
+
+  def vectorized_transform(steps):
+    return tf.vectorized_map(transform_step, steps)
+
+  if optimization_batch_size > 1:
+    steps = steps_dataset.batch(optimization_batch_size).map(
+        vectorized_transform).unbatch()
+  else:
+    steps = steps_dataset.map(transform_step)
+  return steps
+
+
 def _apply_episode(
     episode: rlds_types.Episode,
     transform_step_dataset: Callable[[tf.data.Dataset], Any],

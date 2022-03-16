@@ -43,6 +43,10 @@ the full documentation of the API in the code.
     the steps dataset of a dataset of episodes. The transformation is applied to
     each dataset of steps (not to each step separately).
 
+*   `rlds.transformations.map_steps`: Applies a transformation to all the
+    elements (steps) of a dataset. The transformation is applied to each element
+    individually.
+
 ## Concatenation
 
 *   `rlds.transformations.concatenate`: concatenatest two datasets of steps. If

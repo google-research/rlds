@@ -34,6 +34,7 @@ from rlds.transformations.nested_ops import apply_nested_steps
 from rlds.transformations.nested_ops import episode_length
 from rlds.transformations.nested_ops import final_step
 from rlds.transformations.nested_ops import map_nested_steps
+from rlds.transformations.nested_ops import map_steps
 from rlds.transformations.nested_ops import sum_dataset
 from rlds.transformations.nested_ops import sum_nested_steps
 
