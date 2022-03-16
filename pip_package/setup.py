@@ -30,8 +30,13 @@ spec.loader.exec_module(rlds_version)
 requirements = [
     'absl-py',
     'numpy',
+]
+
+# TF is a requirement, but some of the libraries that depend on us require
+# a specific version of TF, so we let them install it.
+optional_requirements = [
     'tensorflow',
-],
+]
 
 long_description = """RLDS is a library to manipulate datasets with episodic
 structure. When data is loaded as a dataset of episodes containing nested
@@ -60,6 +65,9 @@ setup(
     keywords='reinforcement-learning python machine learning datasets',
     packages=find_packages(),
     install_requires=requirements,
+    extras_require={
+        'tensorflow': optional_requirements,
+        },
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
