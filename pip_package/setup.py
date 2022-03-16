@@ -33,14 +33,13 @@ requirements = [
     'tensorflow',
 ],
 
-# TODO(sabela): update github link once we have the real one.
 long_description = """RLDS is a library to manipulate datasets with episodic
 structure. When data is loaded as a dataset of episodes containing nested
 datasets of steps, RLDS provides utils to manipulate them and makes it easier
 to perform transformations that are common in RL, Apprenticeship Learning or
 other algorithms that learn from experience
 
-For more information see [github repository](http://github.com/google-research/rl-web-recorder)."""
+For more information see [github repository](http://github.com/google-research/rlds)."""
 
 # Get the version from metadata.
 version = rlds_version.__version__
