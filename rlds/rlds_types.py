@@ -50,6 +50,13 @@ AGENT_ID = 'agent_id'
 # UTF-8 encoded string describing the configuration of the environment
 # as it was instantiated to generate the episode. This field can for example be
 # a JSON string.
+# RLDS provides a function to instantiates an environment based on this config
+# provided the environment config is a dictionary made of 3 items:
+# - "module": refers to the module name to import to be able to instiate the
+#             environment.
+# - "factory": refers to the function name to invoke to create the environment.
+# - "config": is a dictionary where the keys are the keyword arguments
+#             of the factory.
 ENVIRONMENT_CONFIG = 'environment_config'
 
 # Identifier of the experiment when the episode was generated as part
