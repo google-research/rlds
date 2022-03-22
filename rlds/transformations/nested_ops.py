@@ -267,7 +267,7 @@ def episode_length(
   """
   cardinality = steps_dataset.cardinality()
   if cardinality != tf.data.experimental.UNKNOWN_CARDINALITY:
-    return tf.cast(steps_dataset.cardinality(), tf.int32)
+    return tf.cast(cardinality, tf.int32)
 
   if optimization_batch_size == flexible_batch.BATCH_AUTO_TUNE:
     size = shape_ops.size_from_spec(steps_dataset.element_spec)
