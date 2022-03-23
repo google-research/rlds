@@ -15,6 +15,7 @@
 # coding=utf-8
 """RLDS basic API."""
 
+
 from rlds import transformations
 
 
@@ -33,3 +34,13 @@ from rlds.rlds_types import OBSERVATION
 from rlds.rlds_types import REWARD
 from rlds.rlds_types import Step
 from rlds.rlds_types import STEPS
+
+# Episode metadata.
+
+from rlds.rlds_types import AGENT_ID
+from rlds.rlds_types import ENVIRONMENT_CONFIG
+from rlds.rlds_types import EPISODE_ID
+from rlds.rlds_types import EXPERIMENT_ID
+from rlds.rlds_types import INVALID
+
+
