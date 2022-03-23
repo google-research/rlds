@@ -25,6 +25,7 @@ from rlds.rlds_types import BatchedEpisode
 from rlds.rlds_types import BatchedStep
 from rlds.rlds_types import build_episode
 from rlds.rlds_types import build_step
+from rlds.rlds_types import CORE_STEP_FIELDS
 from rlds.rlds_types import DISCOUNT
 from rlds.rlds_types import Episode
 from rlds.rlds_types import IS_FIRST

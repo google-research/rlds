@@ -27,6 +27,9 @@ IS_FIRST = 'is_first'
 IS_LAST = 'is_last'
 DISCOUNT = 'discount'
 
+CORE_STEP_FIELDS = frozenset(
+    [OBSERVATION, ACTION, REWARD, IS_TERMINAL, IS_FIRST, IS_LAST, DISCOUNT])
+
 # Constants representing Episode fields
 STEPS = 'steps'
 
@@ -69,7 +72,6 @@ EXPERIMENT_ID = 'experiment_id'
 # Since episodes are in general recorded step by step, there are a few scenarios
 # where an episode might be incomplete: e.g. machine preemption.
 INVALID = 'invalid'
-
 
 # Types of RLDS data
 Episode = Dict[str, Any]
@@ -177,9 +179,7 @@ def _is_valid_steps_dataset(dataset: tf.data.Dataset) -> bool:
 
   """
   step = next(iter(dataset))
-  return (OBSERVATION in step and ACTION in step and REWARD in step and
-          IS_TERMINAL in step and IS_FIRST in step and IS_LAST in step and
-          DISCOUNT in step)
+  return CORE_STEP_FIELDS.issubset(step.keys())
 
 
 def is_valid_rlds_dataset(dataset: tf.data.Dataset) -> bool:
