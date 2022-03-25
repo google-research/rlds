@@ -17,10 +17,12 @@
 
 import json
 
+
 from absl.testing import absltest
 import dm_env
 from rlds import envlogger_utils
 from rlds import rlds_types
+import tensorflow as tf
 
 
 class EnvLoggerUtilsTest(absltest.TestCase):
@@ -99,7 +101,10 @@ class EnvLoggerUtilsTest(absltest.TestCase):
     self.assertEqual(metadata[rlds_types.AGENT_ID]['type'], 'synthetic')
 
     # Episode #1: change of agent.
-    episode_metadata_provider.set_agent_metadata({'type': 'human'})
+    episode_metadata_provider.set_agent_metadata({
+        'type': 'human',
+        'checkpoint': 'None'
+    })
     ts = dm_env.restart(dummy_observation)
     metadata = episode_metadata_provider.get_episode_metadata(
         ts, dummy_action, env)
@@ -123,6 +128,69 @@ class EnvLoggerUtilsTest(absltest.TestCase):
     ts = env.reset()
     self.assertEqual(ts.observation.shape[0], n_rows)
     self.assertEqual(ts.observation.shape[1], n_columns)
+
+  def test_set_agent_metadata_fails_on_type_mismatch(self):
+    episode_metadata_provider = envlogger_utils.EpisodeMetadataProvider(
+        agent_metadata=self.get_agent_metadata(),
+        env_config=self.get_env_config(),
+        serialization=envlogger_utils.MetadataSerialization.NONE)
+    with self.assertRaises(ValueError):
+      episode_metadata_provider.set_agent_metadata({'type': 'human'})
+
+  def test_set_agent_metadata_with_json_ignores_types(self):
+    episode_metadata_provider = envlogger_utils.EpisodeMetadataProvider(
+        agent_metadata=self.get_agent_metadata(),
+        env_config=self.get_env_config(),
+        serialization=envlogger_utils.MetadataSerialization.JSON)
+    episode_metadata_provider.set_agent_metadata({'type': 'human'})
+
+    env, dummy_action, dummy_observation = None, None, None
+
+    # Episode #0.
+    ts = dm_env.restart(dummy_observation)
+    metadata = episode_metadata_provider.get_episode_metadata(
+        ts, dummy_action, env)
+    serialized_metadata = json.dumps({'type': 'human'})
+    self.assertEqual(metadata[rlds_types.AGENT_ID], serialized_metadata)
+
+  def test_episode_metadata_spec(self):
+    episode_metadata_provider = envlogger_utils.EpisodeMetadataProvider(
+        agent_metadata=self.get_agent_metadata(),
+        env_config=self.get_env_config(),
+        serialization=envlogger_utils.MetadataSerialization.NONE)
+    spec = episode_metadata_provider.get_episode_metadata_spec()
+
+    expected_spec = {
+        rlds_types.EPISODE_ID: tf.TensorSpec(shape=(), dtype=tf.string),
+        rlds_types.AGENT_ID: {
+            'type': tf.TensorSpec(shape=(), dtype=tf.string),
+            'checkpoint': tf.TensorSpec(shape=(), dtype=tf.string),
+        },
+        rlds_types.ENVIRONMENT_CONFIG: {
+            'name': tf.TensorSpec(shape=(), dtype=tf.string),
+            'attr1': tf.TensorSpec(shape=(), dtype=tf.string),
+            'attr2': tf.TensorSpec(shape=(), dtype=tf.string),
+        },
+        rlds_types.EXPERIMENT_ID: tf.TensorSpec(shape=(), dtype=tf.string),
+        rlds_types.INVALID: tf.TensorSpec(shape=(), dtype=tf.bool)
+    }
+    self.assertEqual(spec, expected_spec)
+
+  def test_episode_metadata_spec_json(self):
+    episode_metadata_provider = envlogger_utils.EpisodeMetadataProvider(
+        agent_metadata=self.get_agent_metadata(),
+        env_config=self.get_env_config(),
+        serialization=envlogger_utils.MetadataSerialization.JSON)
+    spec = episode_metadata_provider.get_episode_metadata_spec()
+
+    expected_spec = {
+        rlds_types.EPISODE_ID: tf.TensorSpec(shape=(), dtype=tf.string),
+        rlds_types.AGENT_ID: tf.TensorSpec(shape=(), dtype=tf.string),
+        rlds_types.ENVIRONMENT_CONFIG: tf.TensorSpec(shape=(), dtype=tf.string),
+        rlds_types.EXPERIMENT_ID: tf.TensorSpec(shape=(), dtype=tf.string),
+        rlds_types.INVALID: tf.TensorSpec(shape=(), dtype=tf.bool)
+    }
+    self.assertEqual(spec, expected_spec)
 
 
 if __name__ == '__main__':

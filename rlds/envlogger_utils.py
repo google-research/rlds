@@ -23,7 +23,7 @@ from typing import Any, Dict, Optional, Text
 
 import dm_env
 from rlds import rlds_types
-
+import tensorflow as tf
 
 
 Metadata = Dict[Text, Any]
@@ -70,6 +70,13 @@ class EpisodeMetadataProvider:
 
   def set_agent_metadata(self, agent_metadata: Any):
     """Sets the agent specification."""
+    if self._serialization == MetadataSerialization.NONE:
+      old_spec = tf.nest.map_structure(tf.type_spec_from_value,
+                                       self._agent_metadata)
+      new_spec = tf.nest.map_structure(tf.type_spec_from_value, agent_metadata)
+      if old_spec != new_spec:
+        raise ValueError(f'New agent metadata has spec {new_spec} that is'
+                         f' incompatible with the current spec {old_spec}')
     self._agent_metadata = agent_metadata
 
   def get_episode_metadata(self,
@@ -93,6 +100,27 @@ class EpisodeMetadataProvider:
       self._current_episode_metadata[rlds_types.INVALID] = False
 
     return self._current_episode_metadata
+
+  def _serialized_spec(self, metadata):
+    if self._serialization == MetadataSerialization.JSON:
+      return tf.TensorSpec(shape=(), dtype=tf.string)
+    else:
+      return tf.nest.map_structure(tf.type_spec_from_value, metadata)
+
+  def get_episode_metadata_spec(self):
+    """Returns the spec of the metadata as tf.TensorSpec."""
+    return {
+        rlds_types.EPISODE_ID:
+            tf.TensorSpec(shape=(), dtype=tf.string),
+        rlds_types.AGENT_ID:
+            self._serialized_spec(self._agent_metadata),
+        rlds_types.ENVIRONMENT_CONFIG:
+            self._serialized_spec(self._env_config),
+        rlds_types.EXPERIMENT_ID:
+            self._serialized_spec(self._experiment_metadata),
+        rlds_types.INVALID:
+            tf.TensorSpec(shape=(), dtype=tf.bool),
+    }
 
 
 def get_standard_episode_metadata_fn(
