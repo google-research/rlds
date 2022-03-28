@@ -49,13 +49,13 @@ class EpisodeMetadataProvider:
       env_config: Optional[Any] = None,
       experiment_metadata: Optional[Any] = None,
       serialization: MetadataSerialization = MetadataSerialization.JSON):
-    default_value = 'Unknown'
+    default_value = 'None'
     self._agent_metadata = (default_value if agent_metadata is None
                             else agent_metadata)
     self._env_config = default_value if env_config is None else env_config
     self._experiment_metadata = experiment_metadata
     if self._experiment_metadata is None:
-      self._experiment_metadata = 'Unknown'
+      self._experiment_metadata = default_value
 
     self._current_episode_metadata = None
     self._serialization = serialization
@@ -78,6 +78,17 @@ class EpisodeMetadataProvider:
         raise ValueError(f'New agent metadata has spec {new_spec} that is'
                          f' incompatible with the current spec {old_spec}')
     self._agent_metadata = agent_metadata
+
+  def set_env_config(self, env_config: Any):
+    """Sets the environment configuration."""
+    if self._serialization == MetadataSerialization.NONE:
+      old_spec = tf.nest.map_structure(tf.type_spec_from_value,
+                                       self._env_config)
+      new_spec = tf.nest.map_structure(tf.type_spec_from_value, env_config)
+      if old_spec != new_spec:
+        raise ValueError(f'New env config has spec {new_spec} that is'
+                         f' incompatible with the current spec {old_spec}')
+    self._env_config = env_config
 
   def get_episode_metadata(self,
                            timestep: dm_env.TimeStep,

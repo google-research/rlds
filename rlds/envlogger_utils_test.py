@@ -153,6 +153,37 @@ class EnvLoggerUtilsTest(absltest.TestCase):
     serialized_metadata = json.dumps({'type': 'human'})
     self.assertEqual(metadata[rlds_types.AGENT_ID], serialized_metadata)
 
+  def test_set_env_config_fails_on_type_mismatch(self):
+    episode_metadata_provider = envlogger_utils.EpisodeMetadataProvider(
+        agent_metadata=self.get_agent_metadata(),
+        env_config=self.get_env_config(),
+        serialization=envlogger_utils.MetadataSerialization.NONE)
+    with self.assertRaises(ValueError):
+      episode_metadata_provider.set_env_config(
+          {'env_name': 'new_env',
+           'attr3': 'value_attr3'})
+
+  def test_set_env_config_with_json_ignores_types(self):
+    new_env_config = {
+        'env_name': 'new_env',
+        'attr3': 'value_attr3'
+    }
+    episode_metadata_provider = envlogger_utils.EpisodeMetadataProvider(
+        agent_metadata=self.get_agent_metadata(),
+        env_config=self.get_env_config(),
+        serialization=envlogger_utils.MetadataSerialization.JSON)
+    episode_metadata_provider.set_env_config(new_env_config)
+
+    env, dummy_action, dummy_observation = None, None, None
+
+    # Episode #0.
+    ts = dm_env.restart(dummy_observation)
+    metadata = episode_metadata_provider.get_episode_metadata(
+        ts, dummy_action, env)
+    serialized_metadata = json.dumps(new_env_config)
+    self.assertEqual(metadata[rlds_types.ENVIRONMENT_CONFIG],
+                     serialized_metadata)
+
   def test_episode_metadata_spec(self):
     episode_metadata_provider = envlogger_utils.EpisodeMetadataProvider(
         agent_metadata=self.get_agent_metadata(),
