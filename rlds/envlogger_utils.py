@@ -15,6 +15,7 @@
 # coding=utf-8
 """EnvLogger utility to add standard episode metadata."""
 
+import contextlib
 import enum
 import importlib
 import json
@@ -22,6 +23,7 @@ import secrets
 from typing import Any, Dict, Optional, Text
 
 import dm_env
+import gin
 from rlds import rlds_types
 import tensorflow as tf
 
@@ -173,7 +175,12 @@ def make_env(env_config: Dict[str, Any]) -> Any:
   """Makes a new environment given an RLDS environment config.
 
   Args:
-    env_config: A config of the environment.
+    env_config: A config of the environment. This is a dictionary with 'module',
+      'factory' and 'config' as mandatory keys and 'gin_scope' and 'gin_config'
+      as optional keys. The 'module' and 'factory' defines which function to
+      execute to create the environment while the 'config' is a list of named
+      parameters that are given to this function. Optionally, one can pass
+      a gin scope and a gin config to pass extra parameters using GIN.
 
   Returns:
     A new environment. Note that there is no constraint on the type of
@@ -181,4 +188,12 @@ def make_env(env_config: Dict[str, Any]) -> Any:
   """
   module = importlib.import_module(env_config['module'])
   factory = getattr(module, env_config['factory'])
-  return factory(**env_config['config'])
+  if 'gin_config' in env_config:
+    gin.parse_config(env_config['gin_config'])
+  if 'gin_scope' in env_config:
+    context = gin.config_scope(env_config['gin_scope'])
+  else:
+    context = contextlib.nullcontext()
+  with context:
+    env = factory(**env_config['config'])
+  return env
