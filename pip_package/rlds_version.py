@@ -13,7 +13,6 @@
 # limitations under the License.
 
 # coding=utf-8
-# python3
 """Package metadata for RLDS.
 
 This is kept in a separate module so that it can be imported from setup.py, at

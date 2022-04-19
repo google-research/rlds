@@ -13,7 +13,6 @@
 # limitations under the License.
 
 # coding=utf-8
-# python3
 """Install script for setuptools."""
 
 import datetime
