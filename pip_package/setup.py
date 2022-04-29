@@ -35,6 +35,7 @@ requirements = [
 # a specific version of TF, so we let them install it.
 optional_requirements = [
     'tensorflow',
+    'tensorflow-datasets'
 ]
 
 long_description = """RLDS is a library to manipulate datasets with episodic
