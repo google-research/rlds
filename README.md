@@ -140,8 +140,8 @@ documentation for more details.
 Note that per-session metadata can be stored but is currently ignored when
 loading the dataset.
 
-NOTE: We recommend to use the TFDS Envlogger backend in order to get datasets that can
-be read directly with TFDS. See an example in
+NOTE: We recommend to use the TFDS Envlogger backend in order to get datasets
+that can be read directly with TFDS. See an example in
 [this colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_tfds_envlogger.ipynb).
 
 Note that the Envlogger follows the [dm_env] convention. So considering:
@@ -263,7 +263,9 @@ returned by the resulting dataset come from unrelated episodes. It is important 
 however, that this way each step will be loaded `N` times. To avoid duplicates,
 it is possible to construct each dataset using disjoint [splits](https://www.tensorflow.org/datasets/splits).
 
-See one example of randomized access in the [Atari colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/tfds_rlu_atari.ipynb).
+See one example of randomized access in the
+[Atari colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/tfds_rlu_atari.ipynb).
+
 ### Reducing memory usage
 
 To improve throughput of loading datasets, by default TFDS loads multiple partitions
