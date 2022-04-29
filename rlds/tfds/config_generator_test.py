@@ -118,7 +118,7 @@ class ConfigGeneratorTest(absltest.TestCase):
     data_type = config_generator.extract_feature_from_data(
         data, use_images=True, image_encoding='png', squeeze_scalars=False)
     self.assertEqual(type(data_type['Field']), tfds.features.Tensor)
-    self.assertEqual(data_type['Field'].shape, ())
+    self.assertEqual(data_type['Field'].shape, (1,))
     self.assertEqual(data_type['Field'].dtype, tf.float64)
 
 

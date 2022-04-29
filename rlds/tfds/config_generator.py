@@ -112,8 +112,8 @@ def extract_feature_from_data(
   """
   if isinstance(data, dict):
     return tfds.features.FeaturesDict({
-        k: extract_feature_from_data(data[k], use_images, image_encoding, k)
-        for k in data
+        k: extract_feature_from_data(data[k], use_images, image_encoding, k,
+                                     squeeze_scalars) for k in data
     })
   elif isinstance(data, tuple):
     raise ValueError('Tuples are not supported in TFDS. '
