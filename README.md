@@ -177,6 +177,9 @@ with the canonical [RLDS dataset format](#dataset-format).
 
 ### Load with TFDS
 
+Note: In TFDS you can load the nested dataset as a batched sequence instead of a
+`tf.data.Dataset`. See the [FAQ](#faq) for details.
+
 #### Datasets created with Envlogger and the TFDS backend
 
 These datasets can be loaded directly with:
@@ -273,10 +276,34 @@ of the dataset in parallel. In the case of datasets with big episodes that can r
 in high memory usage. If you run into high memory usage problems, it is worth playing
 around with `read_config` provided to [tfds.load](https://www.tensorflow.org/datasets/api_docs/python/tfds/load).
 
+### Loading the steps as a batch instead of a nested dataset.
+
+If using TFDS you can load the nested dataset as a batched sequence instead of a
+nested `tf.data.Dataset`. You can do it by using `SkipDecoding`:
+
+```py
+ds = tfds.load('d4rl_mujoco_halfcheetah/v0-medium', decoders={rlds.STEPS: tfds.decode.SkipDecoding()}, split='train')
+```
+
+To decode the steps as a dataset, you can use
+`tf.data.Dataset.from_tensor_slices`.
+
+```py
+
+for e in ds:
+ print(tf.data.Dataset.from_tensor_slices(e[rlds.STEPS]))
+ break
+
+```
+
+When using `tfds.builder_from_directories` or `tfds.builder_from_directory`, the
+`decoder` argument can be passed to `as_dataset`.
+
 ## Who uses RLDS
 
 ### Publications
 Below is a sample of publications using RLDS:
+
 *   [Hyperparameter Selection for Imitation Learning](https://arxiv.org/abs/2105.12034).
     L. Hussenot et al., ICML 2021.
 *   [Continuous Control with Action Quantization from Demonstrations](https://arxiv.org/pdf/2110.10149.pdf),R.
