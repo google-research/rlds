@@ -42,6 +42,16 @@ py_library(
     ],
 )
 
+py_library(
+    name = "episode_writer",
+    srcs = ["episode_writer.py"],
+    srcs_version = "PY3",
+    deps = [
+        "//rlds:rlds_types",
+        requirement("tensorflow-datasets"),
+    ],
+)
+
 py_test(
     name = "config_generator_test",
     srcs = ["config_generator_test.py"],

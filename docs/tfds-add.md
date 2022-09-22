@@ -21,10 +21,14 @@ You can follow the [instructions to add a dataset] in the TFDS site.
 
 There are situations in which it might be preferrable to re-write the raw data
 into an RLDS/TFDS compatible format before adding it to TFDS (for example if
-your data uses a format that cannot be shared). We are working on solutions to
-make this easier.
+your data uses a format that cannot be shared). You can use the [Envlogger] or
+the [EpisodeWriter] directly to do so. To use the EpisodeWriter, you can create
+your DatasetConfig with the [ConfigGenerator] tool.
 
 [instructions to add a dataset]: https://www.tensorflow.org/datasets/add_dataset?hl=en
+[EpisodeWiter]: https://github.com/google-research/rlds/blob/main/rlds/tfds/episode_writer.py
+[Envlogger]:https://github.com/google-research/rlds#how-to-create-a-dataset
+[ConfigGenerator]: https://github.com/google-research/rlds/blob/main/rlds/tfds/config_generator.py
 
 ### My RLDS dataset is already in TFDS format
 
