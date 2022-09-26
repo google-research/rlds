@@ -269,6 +269,26 @@ it is possible to construct each dataset using disjoint [splits](https://www.ten
 See one example of randomized access in the
 [Atari colab](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/tfds_rlu_atari.ipynb).
 
+### Processing random episodes in multiple readers.
+
+Sometimes, users read multiple copies of the dataset in separate processes. For
+example, to emulate a multiple-actor single learner scenario, where the actors
+get the offline data from the same dataset. In these situations, it is important
+that the different processes don't get the same sequence of episodes.
+
+When the number of readers is known, the easiest way is to use the
+[`split` API](https://www.tensorflow.org/datasets/splits#slicing_api) from TFDS
+to ensure that each of the reader takes a different set of episodes from the
+dataset. Note that if one of the reader dies, its portion of the dataset will
+not be processed.
+
+Another option is to ensure that the datasets are read in a non-deterministic
+way. This can be achieved by setting `shuffle_files=True` and by tuning the
+`ReadConfig` options in `tfds.load` or in `builder.as_dataset`. You can find
+more details in the [TFDS documentation about determinism]. In this case, if a
+reader dies, the full dataset can still be processed. However, with this option,
+some episodes may appear more than once.
+
 ### Reducing memory usage
 
 To improve throughput of loading datasets, by default TFDS loads multiple partitions
