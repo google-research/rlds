@@ -88,7 +88,8 @@ def extract_feature_from_data(
     use_images: bool,
     image_encoding: Optional[str],
     field_name: Optional[str] = None,
-    squeeze_scalars: bool = True
+    squeeze_scalars: bool = True,
+    convert_tuple_to_list: bool = False
 ) -> Union[Dict[str, Any], tfds.features.FeatureConnector]:
   """Returns the data type of providing data.
 
@@ -103,6 +104,8 @@ def extract_feature_from_data(
       be encoded as an image.
     squeeze_scalars: if True, it will treat arrays of shape (1,) as
       `tfds.features.Scalar`.
+    convert_tuple_to_list: if True, converts tuple input data to a list, since
+      tuples are not supported in TFDS.
 
   Returns:
     the same nested data structure with the data expressed as TFDS Features.
@@ -113,11 +116,22 @@ def extract_feature_from_data(
   if isinstance(data, dict):
     return tfds.features.FeaturesDict({
         k: extract_feature_from_data(data[k], use_images, image_encoding, k,
-                                     squeeze_scalars) for k in data
+                                     squeeze_scalars, convert_tuple_to_list)
+        for k in data
     })
   elif isinstance(data, tuple):
-    raise ValueError('Tuples are not supported in TFDS. '
-                     'Use dictionaries or lists instead.')
+    if not convert_tuple_to_list:
+      raise ValueError('Tuples are not supported in TFDS. '
+                       'Use dictionaries or lists instead.')
+    if not data:
+      raise ValueError('Trying to extract the type of an empty tuple.')
+    # Elements of a list are expected to have the same types. We don't check all
+    # the elements of the list the same way that we don't check all the steps in
+    # an episode.
+    feature = extract_feature_from_data(data[0], use_images, image_encoding,
+                                        field_name, squeeze_scalars,
+                                        convert_tuple_to_list)
+    return tfds.features.Sequence(feature=feature)
   elif isinstance(data, list):
     if not data:
       raise ValueError('Trying to extract the type of an empty list.')
@@ -125,7 +139,8 @@ def extract_feature_from_data(
     # the elements of the list the same way that we don't check all the steps in
     # an episode.
     feature = extract_feature_from_data(data[0], use_images, image_encoding,
-                                        field_name, squeeze_scalars)
+                                        field_name, squeeze_scalars,
+                                        convert_tuple_to_list)
     return tfds.features.Sequence(feature=feature)
   elif use_images and _is_image(data, field_name, image_encoding):
     if not image_encoding:
