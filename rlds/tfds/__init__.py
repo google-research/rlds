@@ -16,5 +16,4 @@
 """RLDS TFDS libraries."""
 
 from rlds.tfds.config_generator import extract_feature_from_data
-from rlds.tfds.config_generator import generate_config
 from rlds.tfds.config_generator import generate_config_from_spec
