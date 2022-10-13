@@ -71,7 +71,8 @@ ARG pip_dependencies=' \
       numpy \
       oauth2client \
       pandas \
-      portpicker'
+      portpicker \
+      tensorflow-datasets'
 
 ARG tensorflow_pip='tensorflow'
 
