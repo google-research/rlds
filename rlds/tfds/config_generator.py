@@ -200,6 +200,12 @@ def generate_config_from_spec(
       if k not in _STEP_KEYS
   }
 
+  if rlds_types.DISCOUNT in step_spec:
+    discount_info = extract_feature_from_data(step_spec[rlds_types.DISCOUNT],
+                                              use_images, image_encoding)
+  else:
+    discount_info = None
+
   # pytype: disable=wrong-keyword-args
   return tfds.rlds.rlds_base.DatasetConfig(
       name=name,
@@ -209,8 +215,7 @@ def generate_config_from_spec(
                                             use_images, image_encoding),
       reward_info=extract_feature_from_data(step_spec[rlds_types.REWARD],
                                             use_images, image_encoding),
-      discount_info=extract_feature_from_data(step_spec[rlds_types.DISCOUNT],
-                                              use_images, image_encoding),
+      discount_info=discount_info,
       episode_metadata_info=episode_metadata,
       step_metadata_info=step_metadata,
   )
