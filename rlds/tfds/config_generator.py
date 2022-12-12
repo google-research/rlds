@@ -89,7 +89,8 @@ def extract_feature_from_data(
     image_encoding: Optional[str],
     field_name: Optional[str] = None,
     squeeze_scalars: bool = True,
-    convert_tuple_to_list: bool = False
+    convert_tuple_to_list: bool = False,
+    tensor_encoding=tfds.features.Encoding.ZLIB,
 ) -> Union[Dict[str, Any], tfds.features.FeatureConnector]:
   """Returns the data type of providing data.
 
@@ -106,6 +107,7 @@ def extract_feature_from_data(
       `tfds.features.Scalar`.
     convert_tuple_to_list: if True, converts tuple input data to a list, since
       tuples are not supported in TFDS.
+    tensor_encoding: Internal encoding of a `tfds.features.Tensor`.
 
   Returns:
     the same nested data structure with the data expressed as TFDS Features.
@@ -130,7 +132,8 @@ def extract_feature_from_data(
     # an episode.
     feature = extract_feature_from_data(data[0], use_images, image_encoding,
                                         field_name, squeeze_scalars,
-                                        convert_tuple_to_list)
+                                        convert_tuple_to_list,
+                                        tensor_encoding=tensor_encoding)
     return tfds.features.Sequence(feature=feature)
   elif isinstance(data, list):
     if not data:
@@ -140,7 +143,8 @@ def extract_feature_from_data(
     # an episode.
     feature = extract_feature_from_data(data[0], use_images, image_encoding,
                                         field_name, squeeze_scalars,
-                                        convert_tuple_to_list)
+                                        convert_tuple_to_list,
+                                        tensor_encoding=tensor_encoding)
     return tfds.features.Sequence(feature=feature)
   elif use_images and _is_image(data, field_name, image_encoding):
     if not image_encoding:
@@ -159,7 +163,7 @@ def extract_feature_from_data(
     return tfds.features.Tensor(
         shape=data.shape,
         dtype=tf.as_dtype(data.dtype),
-        encoding=tfds.features.Encoding.ZLIB)
+        encoding=tensor_encoding)
 
 
 
