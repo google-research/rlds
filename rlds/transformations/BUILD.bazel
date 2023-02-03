@@ -32,6 +32,7 @@ py_library(
         ":dataset_truncate",
         ":flexible_batch",
         ":nested_ops",
+        ":pattern",
         ":shape_ops",
     ],
 )
@@ -43,7 +44,7 @@ py_library(
     deps = [
         ":shape_ops",
         "//rlds:rlds_types",
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
     ],
 )
 
@@ -56,7 +57,7 @@ py_library(
         ":nested_ops",
         ":shape_ops",
         "//rlds:rlds_types",
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
     ],
 )
 
@@ -66,7 +67,7 @@ py_library(
     srcs_version = "PY3",
     deps = [
         "//rlds:rlds_types",
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
     ],
 )
 
@@ -76,7 +77,7 @@ py_library(
     srcs_version = "PY3",
     deps = [
         requirement("absl-py"),
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
     ],
 )
 
@@ -88,7 +89,7 @@ py_library(
         ":batched_helpers",
         ":flexible_batch",
         "//rlds:rlds_types",
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
     ],
 )
 
@@ -99,7 +100,7 @@ py_library(
     deps = [
         ":flexible_batch",
         "//rlds:rlds_types",
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
     ],
 )
 
@@ -114,7 +115,7 @@ py_library(
         ":shape_ops",
         "//rlds:rlds_types",
         requirement("numpy"),
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
     ],
 )
 
@@ -126,7 +127,7 @@ py_library(
         ":flexible_batch",
         ":shape_ops",
         "//rlds:rlds_types",
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
     ],
 )
 
@@ -137,7 +138,18 @@ py_library(
     deps = [
         ":shape_ops",
         "//rlds:rlds_types",
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
+    ],
+)
+
+py_library(
+    name = "pattern",
+    srcs = ["pattern.py"],
+    srcs_version = "PY3",
+    deps = [
+        "//rlds:rlds_types",
+        requirement("tf-nightly"),
+        requirement("dm-reverb-nightly"),
     ],
 )
 
@@ -149,7 +161,7 @@ py_test(
         ":transformations_testlib",
         "//rlds:rlds_types",
         requirement("absl-py"),
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
         requirement("numpy"),
     ],
 )
@@ -165,7 +177,7 @@ py_test(
         ":transformations_testlib",
         "//rlds:rlds_types",
         requirement("absl-py"),
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
     ],
 )
 
@@ -179,7 +191,7 @@ py_test(
         ":transformations_testlib",
         "//rlds:rlds_types",
         requirement("absl-py"),
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
     ],
 )
 
@@ -193,7 +205,7 @@ py_test(
         ":transformations_testlib",
         "//rlds:rlds_types",
         requirement("absl-py"),
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
     ],
 )
 
@@ -208,7 +220,7 @@ py_test(
         requirement("absl-py"),
         requirement("numpy"),
         "//rlds:rlds_types",
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
     ],
 )
 
@@ -223,7 +235,7 @@ py_test(
         requirement("absl-py"),
         requirement("numpy"),
         "//rlds:rlds_types",
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
     ],
 )
 
@@ -238,7 +250,7 @@ py_test(
         requirement("absl-py"),
         requirement("numpy"),
         "//rlds:rlds_types",
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
     ],
 )
 
@@ -252,6 +264,21 @@ py_test(
         ":transformations_testlib",
         requirement("absl-py"),
         "//rlds:rlds_types",
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
+    ],
+)
+
+py_test(
+    name = "pattern_test",
+    srcs = ["pattern_test.py"],
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = [
+        ":pattern",
+        ":transformations_testlib",
+        requirement("absl-py"),
+        "//rlds:rlds_types",
+        requirement("tf-nightly"),
+        requirement("dm-reverb-nightly"),
     ],
 )

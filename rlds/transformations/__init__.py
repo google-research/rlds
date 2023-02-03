@@ -38,6 +38,9 @@ from rlds.transformations.nested_ops import map_steps
 from rlds.transformations.nested_ops import sum_dataset
 from rlds.transformations.nested_ops import sum_nested_steps
 
+from rlds.transformations.pattern import pattern_map
+from rlds.transformations.pattern import pattern_map_from_transform
+from rlds.transformations.pattern import step_spec
 
 from rlds.transformations.shape_ops import zero_dataset_like
 from rlds.transformations.shape_ops import zeros_from_spec

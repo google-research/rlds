@@ -36,7 +36,7 @@ py_library(
     srcs_version = "PY3",
     deps = [
         "//rlds:rlds_types",
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
         requirement("tensorflow-datasets"),
         requirement("numpy"),
     ],
@@ -61,7 +61,7 @@ py_test(
         ":config_generator",
         requirement("absl-py"),
         requirement("numpy"),
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
         requirement("tensorflow-datasets"),
     ],
 )

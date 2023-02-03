@@ -34,7 +34,7 @@ py_library(
     name = "rlds_types",
     srcs = ["rlds_types.py"],
     srcs_version = "PY3",
-    deps = [requirement("tensorflow")],
+    deps = [requirement("tf-nightly")],
 )
 
 py_test(
@@ -45,6 +45,6 @@ py_test(
     deps = [
         ":rlds_types",
         requirement("absl-py"),
-        requirement("tensorflow"),
+        requirement("tf-nightly"),
     ],
 )

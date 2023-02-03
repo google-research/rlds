@@ -21,6 +21,15 @@ the full documentation of the API in the code.
     overlapping trajectories. See an example
     [here](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_tutorial.ipynb#scrollTo=TGT3YfzFOrBm).
 
+
+## Construct transitions and trajectories
+
+*   `rlds.transformations.pattern_map_from_transform` and
+    `rlds.transformations.pattern_map`: apply Reverb Patterns to an RLDS
+    dataset. If you want to learn more about the patterns, see a tutorial
+    [here](https://colab.research.google.com/github/google-research/rlds/blob/main/rlds/examples/rlds_dataset_patterns.ipynb)
+
+
 ## Manipulating nested datasets
 
 *   `rlds.transformations.episode_length`: obtains the lenght of an episode

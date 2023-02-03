@@ -33,10 +33,14 @@ requirements = [
 
 # TF is a requirement, but some of the libraries that depend on us require
 # a specific version of TF, so we let them install it.
+# We have to use reverb nightly that includes the PatternDataset, so we need
+# tf-nightly to have a matching version of TF.
 optional_requirements = [
-    'tensorflow',
-    'tensorflow-datasets'
+    'tf-nightly',
+    'tensorflow-datasets',
+    'dm-reverb-nightly'
 ]
+
 
 long_description = """RLDS is a library to manipulate datasets with episodic
 structure. When data is loaded as a dataset of episodes containing nested
