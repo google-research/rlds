@@ -1,4 +1,4 @@
-# Copyright 2022 Google LLC.
+# Copyright 2023 Google LLC.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ py_library(
     name = "rlds_types",
     srcs = ["rlds_types.py"],
     srcs_version = "PY3",
-    deps = [requirement("tf-nightly")],
+    deps = [requirement("tensorflow")],
 )
 
 py_test(
@@ -45,6 +45,6 @@ py_test(
     deps = [
         ":rlds_types",
         requirement("absl-py"),
-        requirement("tf-nightly"),
+        requirement("tensorflow"),
     ],
 )

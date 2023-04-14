@@ -1,5 +1,5 @@
 absl-py
 numpy
-dm-reverb-nightly
-tf-nightly
+dm-reverb
+tensorflow
 tensorflow-datasets

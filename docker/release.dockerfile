@@ -72,10 +72,10 @@ ARG pip_dependencies=' \
       oauth2client \
       pandas \
       portpicker \
-      dm-reverb-nightly \
+      dm-reverb \
       tensorflow-datasets'
 
-ARG tensorflow_pip='tf-nightly'
+ARG tensorflow_pip='tensorflow'
 
 # So dependencies are installed for the supported Python versions
 RUN for python in ${python_version}; do \
