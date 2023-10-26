@@ -65,6 +65,47 @@ def zeros_from_spec(spec: tf.TensorSpec) -> rlds_types.Step:
       lambda t: tf.zeros(_zeros_shape(t.shape), t.dtype), spec)
 
 
+def uniform_from_spec(
+    spec: tf.TensorSpec, minval: int, maxval: int, seed: int
+) -> rlds_types.Step:
+  """Builds a tensor of random values with the given spec.
+
+  If the spec has been obtained from a batch of steps where the first
+  dimension is `None`, it will create a zero step with a batch dimension of 1.
+
+  Args:
+    spec: TensorSpec that specifies the shape and types of the output.
+    minval: A Tensor or Python value of type dtype, broadcastable with shape
+      (for integer types, broadcasting is not supported, so it needs to be a
+      scalar). The lower bound on the range of random values to generate
+      (inclusive). Defaults to 0.
+    maxval: A Tensor or Python value of type dtype, broadcastable with shape
+      (for integer types, broadcasting is not supported, so it needs to be a
+      scalar). The upper bound on the range of random values to generate
+      (exclusive). Defaults to 1 if dtype is floating point.
+    seed: A Python integer. Used in combination with tf.random.set_seed to
+      create a reproducible sequence of tensors across multiple calls.
+
+  Returns:
+    tensor with `spec` as TensorSpec, and with all the fields randomly
+    sampled.
+  """
+
+  def uniform(t):
+    return tf.random.uniform(
+        _zeros_shape(t.shape),
+        minval=minval,
+        maxval=maxval,
+        seed=seed,
+        dtype=t.dtype,
+    )
+
+  return tf.nest.map_structure(
+      uniform,
+      spec,
+  )
+
+
 def zero_dataset_like(ds: tf.data.Dataset) -> tf.data.Dataset:
   """Creates a one element dataset with the spec of ds containing zeros.
 

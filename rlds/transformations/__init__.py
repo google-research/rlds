@@ -42,5 +42,6 @@ from rlds.transformations.pattern import pattern_map
 from rlds.transformations.pattern import pattern_map_from_transform
 from rlds.transformations.pattern import step_spec
 
+from rlds.transformations.shape_ops import uniform_from_spec
 from rlds.transformations.shape_ops import zero_dataset_like
 from rlds.transformations.shape_ops import zeros_from_spec
