@@ -159,6 +159,8 @@ def extract_feature_from_data(
     return data.dtype
   elif _is_scalar(data, squeeze_scalars):
     return tf.as_dtype(data.dtype)
+  elif tfds.core.utils.dtype_utils.is_string(data.dtype):
+    return tfds.features.Text()
   else:
     return tfds.features.Tensor(
         shape=data.shape,
