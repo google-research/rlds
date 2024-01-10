@@ -15,6 +15,7 @@
 # coding=utf-8
 """RLDS basic API."""
 
+
 from rlds import metadata
 
 
@@ -30,10 +31,14 @@ from rlds.rlds_types import build_step
 from rlds.rlds_types import CORE_STEP_FIELDS
 from rlds.rlds_types import DISCOUNT
 from rlds.rlds_types import Episode
+from rlds.rlds_types import EpisodeFilterFn
 from rlds.rlds_types import IS_FIRST
 from rlds.rlds_types import IS_LAST
 from rlds.rlds_types import IS_TERMINAL
 from rlds.rlds_types import OBSERVATION
 from rlds.rlds_types import REWARD
 from rlds.rlds_types import Step
+from rlds.rlds_types import StepFilterFn
+from rlds.rlds_types import StepMapFn
 from rlds.rlds_types import STEPS
+from rlds.rlds_types import StepsToStepsFn

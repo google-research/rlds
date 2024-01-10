@@ -14,7 +14,7 @@
 
 # coding=utf-8
 """Types used in RL Datasets."""
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Callable, Dict, List, Optional, Union
 
 import tensorflow as tf
 
@@ -41,6 +41,12 @@ Episode = Dict[str, Any]
 Step = Dict[str, Any]
 BatchedStep = Step
 BatchedEpisode = Episode
+
+# Step(s) transformation function types.
+StepFilterFn = Callable[[Step], bool]
+EpisodeFilterFn = Callable[[Episode], bool]
+StepsToStepsFn = Callable[[tf.data.Dataset], tf.data.Dataset]
+StepMapFn = Callable[[Step], Step]
 
 
 def build_step(
