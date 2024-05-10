@@ -1,4 +1,4 @@
-# Copyright 2023 Google LLC.
+# Copyright 2024 Google LLC.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -277,4 +277,4 @@ def episode_length(
     return steps_dataset.reduce(0, lambda count, step: count + 1)
 
   return steps_dataset.batch(optimization_batch_size).reduce(
-      0, lambda x, step: x + tf.shape(next(iter(step.values())))[0])
+      0, lambda x, step: x + tf.shape(next(iter(tf.nest.flatten(step))))[0])
