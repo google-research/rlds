@@ -57,7 +57,7 @@ create a TFDS builder using the RLDS helpers.
 You can add your dataset directly to TFDS
 following the instructions at https://www.tensorflow.org/datasets.
 
-* If your data has been generated with Envlogger or the RLDS Creator, you can just use the rlds helpers in TFDS (see [here](https://github.com/tensorflow/datasets/blob/master/tensorflow_datasets/rlds/robosuite_panda_pick_place_can/robosuite_panda_pick_place_can.py) an example, or
+* If your data has been generated with Envlogger or the RLDS Creator, you can just use the rlds helpers in TFDS (see [here](https://github.com/tensorflow/datasets/blob/master/tensorflow_datasets/rlds/datasets/robosuite_panda_pick_place_can/robosuite_panda_pick_place_can.py) an example, or
     [here](https://github.com/tensorflow/datasets/blob/master/tensorflow_datasets/robotics/mt_opt/mt_opy.py)
     if you used the TFDS Envlogger backend).
 * Otherwise, make sure your `generate_examples` implementation provides the same structure
