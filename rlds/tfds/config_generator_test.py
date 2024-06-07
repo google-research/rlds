@@ -35,13 +35,13 @@ class ConfigGeneratorTest(absltest.TestCase):
 
 
   def test_extract_feature_image(self):
-    data = {'Image': tf.zeros(shape=(2, 2, 1), dtype=tf.uint8)}
+    data = {'Image': tf.zeros(shape=(2, 2, 1), dtype=np.uint8)}
     data_type = config_generator.extract_feature_from_data(
         data, use_images=True, image_encoding='png')
     self.assertEqual(type(data_type['Image']), tfds.features.Image)
 
   def test_extract_feature_tensor(self):
-    data = {'Image': tf.zeros(shape=(2, 2, 1), dtype=tf.uint8)}
+    data = {'Image': tf.zeros(shape=(2, 2, 1), dtype=np.uint8)}
     data_type = config_generator.extract_feature_from_data(
         data, use_images=False, image_encoding='png')
     self.assertNotEqual(type(data_type['Image']), tfds.features.Image)
@@ -53,7 +53,7 @@ class ConfigGeneratorTest(absltest.TestCase):
     self.assertNotEqual(type(data_type['Image']), tfds.features.Image)
 
   def test_extract_feature_shape_tensor(self):
-    data = {'Image': tf.zeros(shape=(5, 4), dtype=tf.uint8)}
+    data = {'Image': tf.zeros(shape=(5, 4), dtype=np.uint8)}
     data_type = config_generator.extract_feature_from_data(
         data, use_images=True, image_encoding='png')
     self.assertNotEqual(type(data_type['Image']), tfds.features.Image)
@@ -101,7 +101,7 @@ class ConfigGeneratorTest(absltest.TestCase):
         data, use_images=True, image_encoding='png')
     self.assertEqual(type(data_type['Field']), tfds.features.Tensor)
     self.assertEqual(data_type['Field'].shape, (2, 2))
-    self.assertEqual(data_type['Field'].dtype, tf.float64)
+    self.assertEqual(data_type['Field'].dtype, np.float64)
 
   def test_extract_feature_numpy_squeeze_scalar(self):
     data = {'Field': np.ndarray(1)}
@@ -110,7 +110,7 @@ class ConfigGeneratorTest(absltest.TestCase):
         data, use_images=True, image_encoding='png', squeeze_scalars=True)
     self.assertEqual(type(data_type['Field']), tfds.features.Tensor)
     self.assertEqual(data_type['Field'].shape, ())
-    self.assertEqual(data_type['Field'].dtype, tf.float64)
+    self.assertEqual(data_type['Field'].dtype, np.float64)
 
   def test_extract_feature_numpy_scalar(self):
     data = {'Field': np.ndarray(1)}
@@ -119,7 +119,7 @@ class ConfigGeneratorTest(absltest.TestCase):
         data, use_images=True, image_encoding='png', squeeze_scalars=False)
     self.assertEqual(type(data_type['Field']), tfds.features.Tensor)
     self.assertEqual(data_type['Field'].shape, (1,))
-    self.assertEqual(data_type['Field'].dtype, tf.float64)
+    self.assertEqual(data_type['Field'].dtype, np.float64)
 
 
 if __name__ == '__main__':
